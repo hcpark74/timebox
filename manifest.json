@@ -1,0 +1,16 @@
+{
+  "name": "Timebox Flow",
+  "short_name": "Timebox",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f2f7",
+  "theme_color": "#007aff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/591/591576.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
