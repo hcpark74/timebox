@@ -62,7 +62,7 @@ Pages 프로젝트와 KV를 연결해야 데이터가 저장됩니다.
 바인딩 설정은 **다음 배포부터 적용**되므로, 반드시 다시 배포해야 합니다.
 1.  **Deployments** 탭으로 이동합니다.
 2.  **Create new deployment**를 눌러 다시 파일을 업로드하거나, GitHub 연동 시 커밋을 푸시합니다.
-3.  배포가 완료되면 제공된 URL(예: `https://timebox-flow.pages.dev`)로 접속합니다.
+3.  배포가 완료되면 제공된 URL(예: `https://timebox-egg.pages.dev`)로 접속합니다.
 
 ---
 

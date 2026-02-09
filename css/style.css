@@ -1,249 +1,124 @@
-/* Base - Apple Aesthetic */
 :root {
-    --primary-color: #007aff;
-    --bg-color: #f2f2f7;
-    --card-bg: #ffffff;
-    --text-color: #1c1c1e;
-    --text-secondary: #8e8e93;
-    --border-radius: 12px;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --pico-background-color: #f2f2f7;
+    --pico-primary: #007aff;
+    --pico-border-radius: 14px;
 }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-bottom: 40px; /* Safe area */
+    padding: 20px 10px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: -apple-system, sans-serif;
 }
 
-/* Header */
-.app-header {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding: 10px 0;
-    margin-bottom: 20px;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-h1 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin: 0;
-    color: #000;
-}
-
-/* Sync Controls */
-.sync-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-#sync-id {
-    font-size: 0.8rem;
-    padding: 6px 10px;
-    border-radius: 16px;
-    border: 1px solid #d1d1d6;
-    background: #e5e5ea;
-    width: 120px;
-    transition: all 0.2s;
-}
-
-#sync-id:focus {
+/* Cards & Layout */
+article {
     background: #fff;
-    border-color: var(--primary-color);
-}
-
-/* Cards */
-.card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    border: none;
 }
 
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-}
-
-h3 {
-    font-size: 1rem;
-    margin: 0;
-}
-
-h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin: 0;
-}
-
-/* Heatmap */
-.heatmap-container {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    /* Hide scrollbar but keep functionality */
-    scrollbar-width: none;
-}
-.heatmap-container::-webkit-scrollbar {
-    display: none;
-}
-
-.heatmap-week {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.heatmap-cell {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    background-color: #ebedf0;
-}
-
-.heatmap-cell.level-1 { background-color: #9be9a8; }
-.heatmap-cell.level-2 { background-color: #40c463; }
-.heatmap-cell.level-3 { background-color: #30a14e; }
-.heatmap-cell.level-4 { background-color: #216e39; }
-
-/* Date Navigator */
-.date-navigator {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    background: #f2f2f7;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.icon-btn {
-    border: none;
-    background: none;
-    padding: 5px;
-    color: var(--primary-color);
-    cursor: pointer;
-}
-
-/* Steps */
-.step-card {
-    border-left: 3px solid #e5e5ea;
-    padding-left: 15px;
-    margin-bottom: 25px;
-    transition: border-color 0.3s;
-}
-
-.step-card:focus-within {
-    border-left-color: var(--primary-color);
-}
-
-.step-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 5px;
-}
-
-.step-num {
-    background: var(--primary-color);
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: bold;
-}
-
-.step-desc {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-bottom: 10px;
-}
-
-textarea, input[type="text"] {
-    background-color: #f2f2f7 !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-    font-size: 0.9rem !important;
-}
-
-textarea:focus, input[type="text"]:focus {
-    background-color: #fff !important;
-    box-shadow: 0 0 0 2px var(--primary-color) !important;
-}
-
-/* Timebox Grid */
-.timebox-grid {
+.grid-container {
     display: grid;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-.timebox-row {
+@media (max-width: 600px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Timeline Styles */
+.timeline-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    border-bottom: 1px solid #f2f2f7;
+    padding: 8px 0;
 }
 
 .time-label {
-    width: 50px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-align: right;
+    width: 60px;
+    font-size: 0.75rem;
+    color: #8e8e93;
+    font-weight: 600;
 }
 
-.timebox-input {
+.time-input {
     flex: 1;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0.9rem;
+    background: transparent !important;
 }
 
-/* Actions */
-.actions {
-    margin-top: 30px;
+/* Grass Grid & Week Strip */
+.grass-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 10px;
+}
+
+.grass-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: #e5e5ea;
+}
+
+.grass-cell.active {
+    background: var(--pico-primary);
+}
+
+.week-strip {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.day-card {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.day-card.selected {
+    background: var(--pico-primary);
+    color: white;
+}
+
+h2 {
+    font-size: 0.85rem;
+    color: #8e8e93;
+    margin: 0 0 10px 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#current-time {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
     text-align: center;
 }
 
-.primary-btn {
-    background-color: var(--primary-color) !important;
-    border: none !important;
-    border-radius: 12px !important;
-    padding: 12px 30px !important;
-    font-weight: 600 !important;
-    width: 100%;
-    max-width: 300px;
+/* Override Pico Inputs for cleaner look */
+input[type="text"],
+textarea {
+    box-shadow: none !important;
 }
 
-/* Badge */
-.badge {
-    background: #e5f1ff;
-    color: var(--primary-color);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
+input[type="text"]:focus,
+textarea:focus {
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
