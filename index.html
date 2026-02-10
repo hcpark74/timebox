@@ -3,17 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule App</title>
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <!-- Drag & Drop Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 
 <body>
@@ -26,89 +24,16 @@
             </div>
         </header>
 
-        <div class="week-calendar">
-            <div class="day-column">
-                <span class="day-name">Mon</span>
-                <span class="day-number">7</span>
-            </div>
-            <div class="day-column">
-                <span class="day-name">Tue</span>
-                <span class="day-number">8</span>
-            </div>
-            <div class="day-column active">
-                <span class="day-name">Wed</span>
-                <span class="day-number">9</span>
-            </div>
-            <div class="day-column">
-                <span class="day-name">Thu</span>
-                <span class="day-number">10</span>
-            </div>
-            <div class="day-column">
-                <span class="day-name">Fri</span>
-                <span class="day-number">11</span>
-            </div>
-            <div class="day-column">
-                <span class="day-name">Sat</span>
-                <span class="day-number">12</span>
-            </div>
-            <div class="day-column">
-                <span class="day-name">Sun</span>
-                <span class="day-number">13</span>
-            </div>
+        <!-- Dynamic Calendar -->
+        <div class="week-calendar" id="week-calendar">
+            <!-- Populated by JS -->
         </div>
 
-        <div class="schedule-list">
-            <div class="schedule-item">
-                <div class="schedule-info">
-                    <h3>Morning Yoga</h3>
-                    <span class="schedule-time"><i class="far fa-clock"></i>Not schedule</span>
-                </div>
-                <div class="schedule-meta">
-                    <i class="far fa-flag"></i>
-                    <span class="status pending">Pending</span>
-                </div>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-info">
-                    <h3>Team Meeting</h3>
-                    <span class="schedule-time"><i class="far fa-clock"></i>4:30 PM- 5:00 PM</span>
-                </div>
-                <div class="schedule-meta">
-                    <i class="far fa-flag"></i>
-                    <span class="status upcoming">Upcoming</span>
-                </div>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-info">
-                    <h3>Grocery Shopping</h3>
-                    <span class="schedule-time"><i class="far fa-clock"></i>5:30 PM- 6:00 PM</span>
-                </div>
-                <div class="schedule-meta">
-                    <i class="far fa-flag"></i>
-                    <span class="status upcoming">Upcoming</span>
-                </div>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-info">
-                    <h3>Workout Session</h3>
-                    <span class="schedule-time"><i class="far fa-clock"></i>6:30 PM- 7:30 PM</span>
-                </div>
-                <div class="schedule-meta">
-                    <i class="far fa-flag"></i>
-                    <span class="status upcoming">Upcoming</span>
-                </div>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-info">
-                    <h3>Prepare Dinner</h3>
-                    <span class="schedule-time"><i class="far fa-clock"></i>7:30 PM- 8:00 PM</span>
-                </div>
-                <div class="schedule-meta">
-                    <i class="far fa-flag"></i>
-                    <span class="status upcoming">Upcoming</span>
-                </div>
-            </div>
+        <!-- Dynamic Schedule List -->
+        <div class="schedule-list" id="schedule-list">
+            <!-- Populated by JS -->
         </div>
+
         <div class="fab" onclick="showPage('schedule-task-page')">
             <i class="fas fa-plus"></i>
         </div>
@@ -121,49 +46,24 @@
 
         <div class="task-section">
             <h2>Today's Priorities</h2>
-            <div class="task-list">
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="fas fa-briefcase"></i></div>
-                    <span class="task-name">Team Meeting</span>
-                </div>
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="far fa-calendar-check"></i></div>
-                    <span class="task-name">Lunch Break</span>
-                </div>
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="fas fa-bolt"></i></div>
-                    <span class="task-name">Workout Session</span>
-                </div>
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="fas fa-users"></i></div>
-                    <span class="task-name">Grocery Shopping</span>
-                </div>
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="far fa-calendar-check"></i></div>
-                    <span class="task-name">Prepare Dinner</span>
-                </div>
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="far fa-clipboard"></i></div>
-                    <span class="task-name">Read a book</span>
-                </div>
+            <div class="task-list" id="priority-list">
+                <!-- Populated by JS -->
             </div>
         </div>
 
         <div class="task-section" style="margin-top: 24px;">
             <h2>Backlog</h2>
-            <div class="task-list">
-                <div class="task-item">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <div class="task-icon"><i class="far fa-calendar-check"></i></div>
-                    <span class="task-name">Morning Yoga</span>
-                </div>
+            <div class="task-list" id="backlog-list">
+                <!-- Populated by JS -->
             </div>
+        </div>
+
+        <!-- Quick Add Task -->
+        <div class="task-input-container" style="margin-top: 20px;">
+            <input type="text" id="new-task-input" placeholder="New task name..."
+                style="padding: 12px; width: 70%; border: 1px solid #ddd; border-radius: 8px;">
+            <button onclick="addNewTask()"
+                style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">Add</button>
         </div>
 
         <button class="btn-primary" onclick="showPage('schedule-your-task-page')">Let's Schedule</button>
@@ -178,10 +78,16 @@
         </header>
 
         <div class="profile-card">
-            <img src="https://via.placeholder.com/60/007aff/ffffff?text=User" alt="Profile" class="profile-img">
+            <img src="assets/profile.svg" alt="Profile" class="profile-img">
             <div class="profile-info">
                 <h2>Hey, Jayraj</h2>
                 <p>Have a great day!</p>
+                <div style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">
+                    Sync ID: <span id="sync-id-display"
+                        style="font-family: monospace; font-weight: bold; cursor: pointer;"
+                        onclick="copySyncId()">Loading...</span>
+                    <i class="fas fa-edit" onclick="editSyncId()" style="margin-left: 8px; cursor: pointer;"></i>
+                </div>
             </div>
             <i class="fas fa-chevron-right" style="margin-left: auto; color: var(--primary-color);"></i>
         </div>
@@ -192,22 +98,22 @@
                 <div class="category-card">
                     <div class="category-icon"><i class="far fa-calendar-check"></i></div>
                     <h3>Personal</h3>
-                    <p>34 Task</p>
+                    <p id="cat-personal-count">0 Task</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-users"></i></div>
                     <h3>Meet</h3>
-                    <p>5 Task</p>
+                    <p id="cat-meet-count">0 Task</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-bolt"></i></div>
                     <h3>Event</h3>
-                    <p>8 Task</p>
+                    <p id="cat-event-count">0 Task</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-briefcase"></i></div>
                     <h3>Work</h3>
-                    <p>1 Task</p>
+                    <p id="cat-work-count">0 Task</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="far fa-smile"></i></div>
@@ -231,42 +137,17 @@
 
         <div class="schedule-layout">
             <div class="task-list-sidebar">
-                <div class="task-list">
-                    <div class="task-item">
-                        <div class="task-icon"><i class="fas fa-users"></i></div>
-                        <span class="task-name">Grocery Shopping</span>
-                    </div>
-                    <div class="task-item">
-                        <div class="task-icon"><i class="fas fa-bolt"></i></div>
-                        <span class="task-name">Workout Session</span>
-                    </div>
-                    <div class="task-item">
-                        <div class="task-icon"><i class="far fa-clipboard"></i></div>
-                        <span class="task-name">Read a book</span>
-                    </div>
-                    <div class="task-item">
-                        <div class="task-icon"><i class="far fa-calendar-check"></i></div>
-                        <span class="task-name">Prepare Dinner</span>
-                    </div>
+                <div class="task-list" id="draggable-source-list">
+                    <!-- Populated by JS (Unscheduled Tasks) -->
                 </div>
             </div>
-            <div class="timeline-sidebar">
-                <div class="time-slot"><span class="time-label">02:00 PM</span></div>
-                <div class="time-slot"><span class="time-label">02:30 PM</span></div>
-                <div class="time-slot"><span class="time-label">03:00 PM</span></div>
-                <div class="time-slot"><span class="time-label">03:30 PM</span></div>
-                <div class="time-slot"><span class="time-label">04:00 PM</span></div>
-                <div class="time-slot"><span class="time-label">04:30 PM</span></div>
-                <div class="time-slot"><span class="time-label">05:00 PM</span></div>
-                <div class="time-slot"><span class="time-label">05:30 PM</span></div>
-                <div class="time-slot"><span class="time-label">06:00 PM</span></div>
-                <div class="time-slot"><span class="time-label">06:30 PM</span></div>
-                <div class="time-slot"><span class="time-label">07:00 PM</span></div>
+            <div class="timeline-sidebar" id="timeline-slots">
+                <!-- Time slots populated by JS -->
             </div>
         </div>
 
         <div class="btn-group">
-            <button class="btn-secondary">Re-Arrange</button>
+            <button class="btn-secondary" onclick="resetSchedule()">Reset</button>
             <button class="btn-primary" style="margin-top: 0; flex: 1;"
                 onclick="showPage('timeline-page')">Schedule</button>
         </div>
@@ -281,98 +162,23 @@
             </div>
         </header>
 
-        <h3>Wednesday, 09 October</h3>
+        <h3 id="timeline-date-header">Wednesday, 09 October</h3>
 
-        <div class="timeline-container">
-            <div class="time-slot">
-                <span class="time-label">04:30 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-                <div class="task-block" style="height: 60px;">
-                    <h3>Team Mee...</h3>
-                    <div class="task-block-meta">
-                        <i class="far fa-flag"></i>
-                        <div class="task-checkbox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">05:00 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">05:30 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-                <div class="task-block" style="height: 60px;">
-                    <h3>Grocery S...</h3>
-                    <div class="task-block-meta">
-                        <i class="far fa-flag"></i>
-                        <div class="task-checkbox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">06:00 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">06:30 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">07:00 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-                <div class="task-block" style="height: 100px;">
-                    <div>
-                        <h3>Workout</h3>
-                        <h3>Session</h3>
-                    </div>
-                    <div class="task-block-meta">
-                        <i class="far fa-flag"></i>
-                        <div class="task-checkbox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">07:30 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-                <div class="task-block" style="height: 60px;">
-                    <h3>Prepare Di...</h3>
-                    <div class="task-block-meta">
-                        <i class="far fa-flag"></i>
-                        <div class="task-checkbox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">08:00 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">08:30 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-                <div class="task-block" style="height: 100px;">
-                    <div>
-                        <h3>Read a</h3>
-                        <h3>book</h3>
-                    </div>
-                    <div class="task-block-meta">
-                        <i class="far fa-flag"></i>
-                        <div class="task-checkbox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="time-slot">
-                <span class="time-label">09:00 PM</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-            </div>
+        <div class="timeline-container" id="timeline-view">
+            <!-- Populated by JS -->
         </div>
         <div class="fab" onclick="showPage('schedule-task-page')">
             <i class="fas fa-plus"></i>
         </div>
     </div>
 
+
     <nav class="bottom-tab-bar">
         <a href="#" class="tab-item active-calendar" onclick="showPage('calendar-page'); setActiveTab(this)">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="tab-item" onclick="showPage('calendar-page'); setActiveTab(this)">
             <i class="far fa-calendar-alt"></i>
             <span>Calendar</span>
         </a>
@@ -388,8 +194,9 @@
 
     <script src="js/app.js"></script>
     <script>
-        // Check for Service Worker
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
     </script>
 </body>
 

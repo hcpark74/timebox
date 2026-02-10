@@ -1,68 +1,62 @@
-# Timebox Flow (타임박스 플로우) ⏳
+# Schedule App (Timebox Flow) ⏳
 
-**"나만의 데이터가 쌓이는 즐거움"**
-Timebox Flow는 Apple의 깔끔한 디자인 감성을 담은 **몰입형 타임박싱 PWA(Progressive Web App)**입니다.
-복잡한 로그인 없이 '동기화 ID' 하나로 기기 간 데이터를 연동하고, GitHub 스타일의 **잔디(Heatmap)**로 매일의 성취를 시각화합니다.
+**"하루를 디자인하는 가장 심플한 방법"**
+
+Schedule App은 깔끔하고 직관적인 디자인의 **타임박싱 스케줄 관리 PWA(Progressive Web App)**입니다.
+복잡한 설정 없이 주간 일정, 오늘의 우선순위, 그리고 하루의 타임라인을 한눈에 파악할 수 있습니다.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Stack](https://img.shields.io/badge/stack-Cloudflare_Pages_%2B_KV-orange.svg)
+![Stack](https://img.shields.io/badge/stack-HTML_CSS_JS-orange.svg)
 
 ---
 
 ## ✨ 주요 기능
 
-1.  **Apple-Style UI**: `#f2f2f7` 배경과 `#007aff` 포인트 컬러로 네이티브 앱 같은 경험 제공.
-2.  **생산성 히트맵 (Heatmap)**: 매일의 활동량을 초록색 잔디로 시각화하여 동기 부여.
-3.  **5단계 몰입 워크플로우**:
-    - 🧠 **Brain Dump**: 머릿속 생각 쏟아내기.
-    - ⭐ **Top 3 Priorities**: 가장 중요한 3가지 선정.
-    - ⏰ **Timeboxing**: 시간대별 계획 수립.
-4.  **Zero-Login Sync**: 회원가입 없이 ID만 입력하면 PC와 모바일 자동 동기화.
-5.  **PWA 지원**: 스마트폰 홈 화면에 추가하여 네이티브 앱처럼 실행 (오프라인 지원).
+1.  **Weekly Calendar View**:
+    - 직관적인 주간 달력으로 요일별 일정을 쉽게 확인할 수 있습니다.
+    - 현재 요일이 하이라이트되어 오늘의 일정에 집중할 수 있습니다.
+
+2.  **Smart Task Management**:
+    - **Today's Priorities**: 오늘의 핵심 업무를 우선순위에 따라 관리합니다.
+    - **Backlog**: 아직 일정에 넣지 않은 할 일들을 따로 보관합니다.
+    - **Drag & Drop UI**: 직관적인 태스크 이동 인터페이스 (UI 구현).
+
+3.  **Visual Timeline**:
+    - 하루의 흐름을 시각적으로 보여주는 타임라인 뷰를 제공합니다.
+    - 시간대별로 할당된 태스크를 블록 형태로 확인하여 빈 시간을 효율적으로 활용할 수 있습니다.
+
+4.  **Profile & Stats**:
+    - 개인별 활동 통계와 카테고리별 태스크 분포를 대시보드 형태로 제공합니다.
+    - **Category**: Personal, Meet, Event, Work 등 태스크 유형별 관리.
+
+5.  **PWA 지원 & Offline-First**:
+    - 스마트폰 홈 화면에 추가하여 네이티브 앱처럼 사용할 수 있습니다.
+    - 오프라인 상태에서도 기본 UI가 로드됩니다.
 
 ---
 
 ## 🛠 기술 스택 (The Simple Stack)
 
--   **Frontend**: HTML5, [Pico.css](https://picocss.com/) (v2), Day.js
--   **Backend**: Cloudflare Pages Functions (Serverless)
--   **Database**: Cloudflare KV (Key-Value Store)
--   **Icons**: Lucide Icons
+-   **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
+-   **Styling**: Custom CSS (No external detailed frameworks, maximizing performance)
+-   **Icons**: Font Awesome 6
+-   **Fonts**: Inter (Google Fonts)
 
 ---
 
-## 🚀 배포 가이드 (Cloudflare Pages)
+## 🚀 배포 및 실행 가이드
 
-이 프로젝트는 **Cloudflare Pages**와 **KV(Key-Value)** 저장소를 사용하여 무료로 배포할 수 있습니다.
+이 프로젝트는 정적 웹사이트 호스팅 서비스(Github Pages, Cloudflare Pages 등)를 통해 쉽게 배포할 수 있습니다.
 
-### 1단계: Cloudflare Pages 프로젝트 생성
+### 로컬 실행 방법
+1.  프로젝트 폴더를 엽니다.
+2.  `index.html` 파일을 브라우저에서 실행하거나, Live Server 익스텐션을 사용해 엽니다.
+
+### Cloudflare Pages 배포
 1.  [Cloudflare Dashboard](https://dash.cloudflare.com/)에 로그인합니다.
-2.  **Workers & Pages** > **Overview**로 이동합니다.
-3.  **Create application** > **Pages** > **Upload assets**를 선택합니다.
-4.  프로젝트 이름(예: `timebox-flow`)을 입력하고 **Create project**를 클릭합니다.
-5.  이 프로젝트 폴더(`c:/Project/timebox`) 전체를 업로드하거나, GitHub 리포지토리에 올린 후 연동합니다.
-
-### 2단계: KV Namespace 생성
-데이터 저장을 위해 KV 공간이 필요합니다.
-1.  대시보드 왼쪽 메뉴에서 **Workers & Pages** > **KV**를 클릭합니다.
-2.  **Create a namespace**를 클릭하고 이름을 `TIMEBOX_KV`로 입력 후 **Add**를 누릅니다.
-3.  생성된 Namespace의 **ID**를 기억해둘 필요는 없으나, 이름은 기억해두세요.
-
-### 3단계: KV 바인딩 (가장 중요 ⭐)
-Pages 프로젝트와 KV를 연결해야 데이터가 저장됩니다.
-1.  생성한 Pages 프로젝트의 **Settings** 탭으로 이동합니다.
-2.  **Functions** 메뉴를 클릭합니다.
-3.  스크롤을 내려 **KV Namespace Bindings** 섹션을 찾습니다.
-4.  **Add binding**을 클릭합니다.
-    -   **Variable name**: `TIMEBOX_KV` (정확히 입력해야 합니다!)
-    -   **KV Namespace**: 방금 생성한 `TIMEBOX_KV`를 선택합니다.
-5.  **Save**를 클릭하여 저장합니다.
-
-### 4단계: 재배포 (Redeploy)
-바인딩 설정은 **다음 배포부터 적용**되므로, 반드시 다시 배포해야 합니다.
-1.  **Deployments** 탭으로 이동합니다.
-2.  **Create new deployment**를 눌러 다시 파일을 업로드하거나, GitHub 연동 시 커밋을 푸시합니다.
-3.  배포가 완료되면 제공된 URL(예: `https://timebox-egg.pages.dev`)로 접속합니다.
+2.  **Workers & Pages** > **Create application** > **Pages** > **Upload assets**를 선택합니다.
+3.  프로젝트 폴더(`c:/Project/timebox`) 전체를 업로드합니다.
+4.  배포가 완료되면 제공된 URL로 접속합니다.
 
 ---
 
@@ -81,15 +75,15 @@ Pages 프로젝트와 KV를 연결해야 데이터가 저장됩니다.
 
 ```
 /
-├── index.html          # 메인 앱 UI
-├── manifest.json       # 앱 설치 정보 (아이콘, 이름 등)
+├── index.html          # 메인 앱 UI (SPA 구조)
+├── manifest.json       # PWA 설치 정보
 ├── sw.js               # 오프라인 지원 (Service Worker)
+├── assets/             # 이미지 리소스 (프로필, 아이콘 등)
+│   ├── favicon.svg
+│   └── profile.svg
 ├── css/
-│   └── style.css       # Apple 스타일 커스텀 CSS
+│   └── style.css       # 메인 스타일시트
 ├── js/
-│   └── app.js          # 앱 로직 (상태 관리, 동기화, UI)
-└── functions/
-    └── api/
-        ├── data.js     # 데이터 저장/로드 API (GET, PUT)
-        └── stats.js    # 히트맵 데이터 조회 API (GET)
+│   └── app.js          # 페이지 네비게이션 및 인터랙션 로직
+└── functions/          # (Optional) 백엔드 함수 디렉토리
 ```

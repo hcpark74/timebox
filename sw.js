@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timebox-flow-v1';
+const CACHE_NAME = 'timebox-flow-v2';
 const ASSETS = [
     '/',
     '/index.html',

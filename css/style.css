@@ -7,7 +7,7 @@
     --border-color: #e9ecef;
     --border-radius-lg: 16px;
     --border-radius-md: 12px;
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
     --font-family: 'Inter', sans-serif;
 }
 
@@ -21,9 +21,7 @@ body {
     font-family: var(--font-family);
     background-color: var(--bg-light);
     color: var(--text-dark);
-    padding-bottom: 80px;
-    /* For bottom tab bar */
-    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px; /* For bottom tab bar */
 }
 
 .container {
@@ -82,9 +80,8 @@ body {
     color: var(--text-muted);
     margin-bottom: 4px;
 }
-
 .day-column.active .day-name {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255,255,255,0.8);
 }
 
 .day-column .day-number {
@@ -120,7 +117,6 @@ body {
     display: flex;
     align-items: center;
 }
-
 .schedule-info .schedule-time i {
     margin-right: 6px;
 }
@@ -130,7 +126,6 @@ body {
     flex-direction: column;
     align-items: flex-end;
 }
-
 .schedule-meta i {
     color: var(--text-muted);
     margin-bottom: 8px;
@@ -140,14 +135,8 @@ body {
     font-size: 14px;
     font-weight: 500;
 }
-
-.status.pending {
-    color: var(--primary-color);
-}
-
-.status.upcoming {
-    color: #dc3545;
-}
+.status.pending { color: var(--primary-color); }
+.status.upcoming { color: #dc3545; }
 
 /* Schedule Task Page */
 .task-section h2 {
@@ -155,13 +144,11 @@ body {
     font-weight: 600;
     margin-bottom: 16px;
 }
-
 .task-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
 .task-item {
     background-color: var(--bg-white);
     padding: 12px 16px;
@@ -170,13 +157,11 @@ body {
     align-items: center;
     box-shadow: var(--shadow-sm);
 }
-
 .drag-handle {
     color: var(--text-muted);
     margin-right: 16px;
     cursor: grab;
 }
-
 .task-icon {
     width: 40px;
     height: 40px;
@@ -189,13 +174,11 @@ body {
     margin-right: 16px;
     font-size: 18px;
 }
-
 .task-name {
     font-size: 16px;
     font-weight: 500;
     flex-grow: 1;
 }
-
 .btn-primary {
     background-color: var(--primary-color);
     color: var(--bg-white);
@@ -219,7 +202,6 @@ body {
     box-shadow: var(--shadow-sm);
     margin-bottom: 24px;
 }
-
 .profile-img {
     width: 60px;
     height: 60px;
@@ -227,24 +209,20 @@ body {
     object-fit: cover;
     margin-right: 16px;
 }
-
 .profile-info h2 {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 4px;
 }
-
 .profile-info p {
     font-size: 14px;
     color: var(--text-muted);
 }
-
 .category-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
-
 .category-card {
     background-color: var(--bg-white);
     padding: 20px;
@@ -254,9 +232,8 @@ body {
     flex-direction: column;
     align-items: flex-start;
 }
-
 .category-icon {
-    width: 48px;
+        width: 48px;
     height: 48px;
     border-radius: var(--border-radius-md);
     background-color: #fff3e0;
@@ -267,13 +244,11 @@ body {
     margin-bottom: 16px;
     font-size: 20px;
 }
-
 .category-card h3 {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 8px;
 }
-
 .category-card p {
     font-size: 14px;
     color: var(--text-muted);
@@ -284,13 +259,11 @@ body {
     position: relative;
     margin-top: 24px;
 }
-
 .time-slot {
     display: flex;
     margin-bottom: 16px;
     position: relative;
 }
-
 .time-label {
     width: 80px;
     font-size: 14px;
@@ -300,7 +273,6 @@ body {
     position: relative;
     top: -10px;
 }
-
 .task-block {
     background-color: var(--bg-white);
     border-radius: var(--border-radius-md);
@@ -312,22 +284,18 @@ body {
     align-items: center;
     border: 1px solid var(--border-color);
 }
-
 .task-block h3 {
     font-size: 16px;
     font-weight: 500;
 }
-
 .task-block-meta {
     display: flex;
     align-items: center;
 }
-
 .task-block-meta i {
     color: var(--text-muted);
     margin-right: 12px;
 }
-
 .task-checkbox {
     width: 20px;
     height: 20px;
@@ -335,7 +303,6 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
-
 /* Timeline background lines */
 .timeline-bg-line {
     position: absolute;
@@ -368,37 +335,26 @@ body {
     color: var(--text-muted);
     text-decoration: none;
     font-size: 12px;
-    cursor: pointer;
 }
-
 .tab-item i {
     font-size: 20px;
     margin-bottom: 4px;
 }
-
 .tab-item.active {
     color: var(--text-dark);
-    font-weight: 500;
 }
-
 .tab-item.active-calendar {
     background-color: var(--text-dark);
     color: var(--bg-white);
     padding: 8px 16px;
     border-radius: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
 }
-
-.tab-item.active-calendar i {
+    .tab-item.active-calendar i {
     margin-bottom: 0;
-    font-size: 16px;
-}
-
-.tab-item.active-calendar span {
-    display: inline-block;
-}
+    }
+    .tab-item.active-calendar span {
+        display: none;
+    }
 
 
 /* Floating Action Button */
@@ -415,58 +371,48 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     cursor: pointer;
     z-index: 101;
-    transition: background-color 0.2s;
 }
-
 .fab.dark {
     background-color: var(--text-dark);
 }
 
 /* Utilities */
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 /* For Schedule Your Task Page Layout */
 .schedule-layout {
     display: flex;
 }
-
 .task-list-sidebar {
     width: 60%;
     padding-right: 20px;
 }
-
 .timeline-sidebar {
     width: 40%;
     border-left: 1px solid var(--border-color);
     padding-left: 20px;
-    background-color: #f0f2f5;
+    background-color: #f0f2f5; /* Slightly darker bg */
 }
-
 .timeline-sidebar .time-slot {
-    margin-bottom: 30px;
+    margin-bottom: 30px; /* Increase spacing */
 }
-
 .timeline-sidebar .time-label {
     width: 100%;
     text-align: left;
 }
-
 .btn-group {
     display: flex;
     gap: 16px;
     margin-top: 24px;
 }
-
 .btn-secondary {
     background-color: var(--bg-white);
     color: var(--text-dark);
     border: 1px solid var(--border-color);
-    padding: 16px;
+        padding: 16px;
     border-radius: var(--border-radius-lg);
     font-size: 16px;
     font-weight: 600;
