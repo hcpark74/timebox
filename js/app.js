@@ -322,6 +322,23 @@ function renderTimelineSlots() {
                 slot.innerHTML += `<div class="task-item-embedded" style="background:#eef; padding:4px; border-radius:4px; margin-left:10px; font-size:12px;">${task.title}</div>`;
             }
             container.appendChild(slot);
+
+            // Init Sortable for this slot
+            new Sortable(slot, {
+                group: { name: 'scheduling', pull: false, put: true },
+                sort: false,
+                onAdd: function (evt) {
+                    const taskId = evt.item.getAttribute('data-id');
+                    const time = slot.getAttribute('data-time');
+                    const task = state.tasks.find(t => t.id === taskId);
+
+                    if (task) {
+                        state.tasks.forEach(t => { if (t.scheduledTime === time) t.scheduledTime = null; });
+                        task.scheduledTime = time;
+                        saveData();
+                    }
+                }
+            });
         });
     }
 }
@@ -361,23 +378,7 @@ function initDragAndDrop() {
         animation: 150
     });
 
-    document.querySelectorAll('.drop-zone').forEach(slot => {
-        new Sortable(slot, {
-            group: { name: 'scheduling', pull: false, put: true },
-            sort: false,
-            onAdd: function (evt) {
-                const taskId = evt.item.getAttribute('data-id');
-                const time = slot.getAttribute('data-time');
-                const task = state.tasks.find(t => t.id === taskId);
 
-                if (task) {
-                    state.tasks.forEach(t => { if (t.scheduledTime === time) t.scheduledTime = null; });
-                    task.scheduledTime = time;
-                    saveData();
-                }
-            }
-        });
-    });
 }
 
 function onReorder(evt) {
