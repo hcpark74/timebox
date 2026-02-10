@@ -373,9 +373,17 @@ function initDragAndDrop() {
     new Sortable(document.getElementById('backlog-list'), { group: 'shared', animation: 150, onEnd: onReorder });
 
     new Sortable(document.getElementById('draggable-source-list'), {
-        group: { name: 'scheduling', pull: 'clone', put: false },
+        group: { name: 'scheduling', pull: 'clone', put: true },
         sort: false,
-        animation: 150
+        animation: 150,
+        onAdd: function (evt) {
+            const taskId = evt.item.getAttribute('data-id');
+            const task = state.tasks.find(t => t.id === taskId);
+            if (task) {
+                task.scheduledTime = null;
+                saveData();
+            }
+        }
     });
 
 
