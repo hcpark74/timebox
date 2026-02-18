@@ -175,7 +175,10 @@ function renderScheduleList() {
     const listEl = document.getElementById('schedule-list');
     listEl.innerHTML = '';
 
-    const scheduledTasks = state.tasks.filter(t => t.scheduledTime).sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
+    const selectedDateStr = getDateString(state.selectedDate);
+    const scheduledTasks = state.tasks.filter(t =>
+        t.scheduledDate === selectedDateStr && t.scheduledTime
+    ).sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
 
     if (scheduledTasks.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No tasks scheduled.</p>';
@@ -255,13 +258,15 @@ function renderTimeline() {
     const timelineEl = document.getElementById('timeline-view');
     timelineEl.innerHTML = '';
 
+    const selectedDateStr = getDateString(state.selectedDate);
+
     // Generate time slots 08:00 to 22:00
     for (let i = 8; i <= 22; i++) {
         const hour = i.toString().padStart(2, '0') + ":00";
         const hourHalf = i.toString().padStart(2, '0') + ":30";
 
         [hour, hourHalf].forEach(time => {
-            const task = state.tasks.find(t => t.scheduledTime === time);
+            const task = state.tasks.find(t => t.scheduledDate === selectedDateStr && t.scheduledTime === time);
 
             const slotEl = document.createElement('div');
             slotEl.className = 'time-slot';
@@ -309,6 +314,8 @@ function renderTimelineSlots() {
     const container = document.getElementById('timeline-slots');
     container.innerHTML = '';
 
+    const selectedDateStr = getDateString(state.selectedDate);
+
     // 08:00 to 20:00
     for (let i = 8; i <= 20; i++) {
         ['00', '30'].forEach(min => {
@@ -317,7 +324,8 @@ function renderTimelineSlots() {
             slot.className = 'time-slot drop-zone';
             slot.setAttribute('data-time', time);
             slot.innerHTML = `<span class="time-label">${formatTime12(time)}</span>`;
-            const task = state.tasks.find(t => t.scheduledTime === time);
+
+            const task = state.tasks.find(t => t.scheduledDate === selectedDateStr && t.scheduledTime === time);
             if (task) {
                 slot.innerHTML += `<div class="task-item-embedded" style="background:#eef; padding:4px; border-radius:4px; margin-left:10px; font-size:12px;">${task.title}</div>`;
             }
@@ -333,8 +341,16 @@ function renderTimelineSlots() {
                     const task = state.tasks.find(t => t.id === taskId);
 
                     if (task) {
-                        state.tasks.forEach(t => { if (t.scheduledTime === time) t.scheduledTime = null; });
+                        const dateStr = getDateString(state.selectedDate);
+                        // Clear any other task already in this slot for this date
+                        state.tasks.forEach(t => {
+                            if (t.scheduledDate === dateStr && t.scheduledTime === time) {
+                                t.scheduledTime = null;
+                                t.scheduledDate = null;
+                            }
+                        });
                         task.scheduledTime = time;
+                        task.scheduledDate = dateStr;
                         saveData();
                     }
                 }
@@ -355,7 +371,8 @@ function addNewTask() {
             category: 'personal',
             status: 'pending',
             priority: 'medium',
-            scheduledTime: null
+            scheduledTime: null,
+            scheduledDate: null
         });
         input.value = '';
         saveData();
@@ -363,7 +380,13 @@ function addNewTask() {
 }
 
 function resetSchedule() {
-    state.tasks.forEach(t => t.scheduledTime = null);
+    const dateStr = getDateString(state.selectedDate);
+    state.tasks.forEach(t => {
+        if (t.scheduledDate === dateStr) {
+            t.scheduledTime = null;
+            t.scheduledDate = null;
+        }
+    });
     saveData();
 }
 
@@ -381,6 +404,7 @@ function initDragAndDrop() {
             const task = state.tasks.find(t => t.id === taskId);
             if (task) {
                 task.scheduledTime = null;
+                task.scheduledDate = null;
                 saveData();
             }
         }
@@ -411,7 +435,12 @@ function getStartOfWeek(date) {
 }
 
 function isSameDate(d1, d2) {
-    return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth();
+    return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+}
+
+function getDateString(date) {
+    const d = new Date(date);
+    return d.toISOString().split('T')[0];
 }
 
 function formatTime12(time24) {
@@ -458,7 +487,7 @@ function setActiveTab(clickedTab) {
         tab.classList.remove('active-calendar');
     });
 
-    if (clickedTab.querySelector('.far.fa-calendar-alt')) {
+    if (clickedTab.querySelector('.fa-home') || clickedTab.querySelector('.fa-calendar-alt')) {
         clickedTab.classList.add('active-calendar');
     } else {
         clickedTab.classList.add('active');
@@ -470,5 +499,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initSyncId(); // NEW
     loadData();
     initDragAndDrop();
-    showPage('calendar-page');
+    showPage('timeline-page');
 });
