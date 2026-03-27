@@ -177,22 +177,26 @@ function renderScheduleList() {
     listEl.innerHTML = '';
 
     const selectedDateStr = getDateString(state.selectedDate);
-    const scheduledTasks = state.tasks.filter(t =>
-        t.scheduledDate === selectedDateStr && t.scheduledTime
-    ).sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
+    const scheduledTasks = SCHEDULING_BLOCKS.map((block) => {
+        const task = state.tasks.find(t =>
+            t.scheduledDate === selectedDateStr && t.scheduledTime === block.start
+        );
+        return task ? { block, task } : null;
+    }).filter(Boolean);
 
     if (scheduledTasks.length === 0) {
-        listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">선택한 날짜에 배치된 일정이 없습니다.</p>';
+        listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">선택한 날짜에 배치된 고정 블록 일정이 없습니다.</p>';
         return;
     }
 
-    scheduledTasks.forEach(task => {
+    scheduledTasks.forEach(({ block, task }) => {
         const el = document.createElement('div');
-        el.className = 'schedule-item';
+        el.className = `schedule-item ${block.buffer ? 'buffer-item' : ''}`;
         el.innerHTML = `
             <div class="schedule-info">
+                <div class="schedule-block-label">${block.title}</div>
                 <h3>${task.title}</h3>
-                <span class="schedule-time"><i class="far fa-clock"></i>${formatTimeRange(task.scheduledTime)}</span>
+                <span class="schedule-time"><i class="far fa-clock"></i>${formatTime12(block.start)} - ${formatTime12(block.end)}</span>
             </div>
             <div class="schedule-meta">
                 <i class="far fa-flag"></i>
@@ -210,6 +214,9 @@ function renderTaskLists() {
     const prioritySectionEl = document.getElementById('priority-section');
     const priorityHintEl = document.getElementById('priority-limit-hint');
     const openSchedulerBtn = document.getElementById('open-scheduler-btn');
+    const checklistPriorityCount = document.getElementById('checklist-priority-count');
+    const checklistScheduleCount = document.getElementById('checklist-schedule-count');
+    const checklistExecute = document.getElementById('checklist-execute');
     const priorityEl = document.getElementById('priority-list');
     const backlogEl = document.getElementById('backlog-list');
     const dragSourceEl = document.getElementById('draggable-source-list');
@@ -249,6 +256,18 @@ function renderTaskLists() {
     });
 
     const priorityCount = state.tasks.filter(task => task.priority === 'high').length;
+    const selectedDateStr = getDateString(state.selectedDate);
+    const scheduledPriorityCount = state.tasks.filter(task =>
+        task.priority === 'high' &&
+        task.scheduledDate === selectedDateStr &&
+        task.scheduledTime
+    ).length;
+    const completedScheduledPriorityCount = state.tasks.filter(task =>
+        task.priority === 'high' &&
+        task.scheduledDate === selectedDateStr &&
+        task.scheduledTime &&
+        task.status === 'completed'
+    ).length;
     const isPriorityFull = priorityCount >= MAX_PRIORITY_TASKS;
 
     if (prioritySectionEl) {
@@ -256,9 +275,15 @@ function renderTaskLists() {
     }
 
     if (priorityHintEl) {
-        priorityHintEl.textContent = isPriorityFull
-            ? `오늘의 핵심이 가득 찼습니다. 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`
-            : `오늘의 핵심은 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`;
+        if (isPriorityFull) {
+            priorityHintEl.textContent = `오늘의 핵심이 가득 찼습니다. 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`;
+        } else if (priorityCount === 0) {
+            priorityHintEl.textContent = `오늘의 핵심을 1개 이상 선택하면 시간 배치를 시작할 수 있습니다.`;
+        } else if (priorityCount < 3) {
+            priorityHintEl.textContent = `지금도 배치할 수 있지만, 오늘의 핵심을 3개 이상 고르면 하루 흐름이 더 안정적입니다.`;
+        } else {
+            priorityHintEl.textContent = `좋아요. 지금 상태로 시간 블록에 배치하면 됩니다.`;
+        }
     }
 
     if (openSchedulerBtn) {
@@ -268,6 +293,24 @@ function renderTaskLists() {
         openSchedulerBtn.textContent = priorityCount === 0
             ? '오늘의 핵심을 먼저 선택하세요'
             : '시간 배치하기';
+    }
+
+    if (checklistPriorityCount) {
+        checklistPriorityCount.textContent = `1. 오늘의 핵심 고르기 (${priorityCount}/${MAX_PRIORITY_TASKS})`;
+        checklistPriorityCount.classList.toggle('is-active', priorityCount > 0 && priorityCount < 3);
+        checklistPriorityCount.classList.toggle('is-done', priorityCount >= 3);
+    }
+
+    if (checklistScheduleCount) {
+        checklistScheduleCount.textContent = `2. 고정 블록에 배치하기 (${scheduledPriorityCount}/${priorityCount || 0})`;
+        checklistScheduleCount.classList.toggle('is-active', scheduledPriorityCount > 0 && scheduledPriorityCount < priorityCount);
+        checklistScheduleCount.classList.toggle('is-done', priorityCount > 0 && scheduledPriorityCount >= priorityCount);
+    }
+
+    if (checklistExecute) {
+        checklistExecute.textContent = `3. 오늘 일정에서 실행하기 (${completedScheduledPriorityCount}/${scheduledPriorityCount})`;
+        checklistExecute.classList.toggle('is-active', scheduledPriorityCount > 0 && completedScheduledPriorityCount < scheduledPriorityCount);
+        checklistExecute.classList.toggle('is-done', scheduledPriorityCount > 0 && completedScheduledPriorityCount >= scheduledPriorityCount);
     }
 }
 
