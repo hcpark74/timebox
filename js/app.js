@@ -12,6 +12,13 @@ const state = {
 
 const STORAGE_KEY = 'timebox_app_data';
 const SYNC_ID_KEY = 'timebox_sync_id';
+const MAX_PRIORITY_TASKS = 4;
+const SCHEDULING_BLOCKS = [
+    { start: '09:00', end: '11:30', title: '핵심 블록 1', description: '가장 중요한 일 한 가지에 깊게 집중하세요.', tag: '집중' },
+    { start: '13:00', end: '15:00', title: '핵심 블록 2', description: '오후 첫 집중 시간을 대표 작업에 배정하세요.', tag: '집중' },
+    { start: '15:00', end: '17:00', title: '핵심 블록 3', description: '남은 핵심 작업이나 후속 작업을 이어서 진행하세요.', tag: '집중' },
+    { start: '17:00', end: '18:00', title: '버퍼 블록', description: '밀린 일 정리, 마무리, 예상 밖 작업 처리에 활용하세요.', tag: '버퍼', buffer: true }
+];
 
 // --- 동기화 및 데이터 로직 ---
 
@@ -200,6 +207,9 @@ function renderScheduleList() {
 
 // 3. Task Lists (Priorities & Backlog)
 function renderTaskLists() {
+    const prioritySectionEl = document.getElementById('priority-section');
+    const priorityHintEl = document.getElementById('priority-limit-hint');
+    const openSchedulerBtn = document.getElementById('open-scheduler-btn');
     const priorityEl = document.getElementById('priority-list');
     const backlogEl = document.getElementById('backlog-list');
     const dragSourceEl = document.getElementById('draggable-source-list');
@@ -237,6 +247,28 @@ function renderTaskLists() {
             dragSourceEl.appendChild(dragEl);
         }
     });
+
+    const priorityCount = state.tasks.filter(task => task.priority === 'high').length;
+    const isPriorityFull = priorityCount >= MAX_PRIORITY_TASKS;
+
+    if (prioritySectionEl) {
+        prioritySectionEl.classList.toggle('priority-full', isPriorityFull);
+    }
+
+    if (priorityHintEl) {
+        priorityHintEl.textContent = isPriorityFull
+            ? `오늘의 핵심이 가득 찼습니다. 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`
+            : `오늘의 핵심은 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`;
+    }
+
+    if (openSchedulerBtn) {
+        const isReadyToSchedule = priorityCount >= 3;
+        openSchedulerBtn.disabled = priorityCount === 0;
+        openSchedulerBtn.classList.toggle('btn-ready', isReadyToSchedule);
+        openSchedulerBtn.textContent = priorityCount === 0
+            ? '오늘의 핵심을 먼저 선택하세요'
+            : '시간 배치하기';
+    }
 }
 
 function deleteTask(id, event) {
@@ -254,38 +286,49 @@ function renderTimeline() {
 
     const selectedDateStr = getDateString(state.selectedDate);
 
-    // Generate time slots 08:00 to 22:00
-    for (let i = 8; i <= 22; i++) {
-        const hour = i.toString().padStart(2, '0') + ":00";
-        const hourHalf = i.toString().padStart(2, '0') + ":30";
-
-        [hour, hourHalf].forEach(time => {
-            const task = state.tasks.find(t => t.scheduledDate === selectedDateStr && t.scheduledTime === time);
-
-            const slotEl = document.createElement('div');
-            slotEl.className = 'time-slot';
-            slotEl.innerHTML = `
-                <span class="time-label">${formatTime12(time)}</span>
-                <div class="timeline-bg-line" style="top: 10px;"></div>
-                ${task ? `
-                <div class="task-block" style="height: 60px;">
-                    <h3>${task.title}</h3>
-                    <div class="task-block-meta">
-                        <i class="far fa-flag"></i>
-                        <div class="task-checkbox" onclick="toggleTaskStatus('${task.id}')" 
-                             style="background: ${task.status === 'completed' ? 'var(--primary-color)' : 'transparent'}"></div>
-                    </div>
-                </div>` : ''}
-            `;
-            timelineEl.appendChild(slotEl);
-        });
-    }
+    SCHEDULING_BLOCKS.forEach((block) => {
+        const task = state.tasks.find(t => t.scheduledDate === selectedDateStr && t.scheduledTime === block.start);
+        const blockEl = document.createElement('div');
+        blockEl.className = `timeline-block ${block.buffer ? 'buffer-block' : ''}`;
+        blockEl.innerHTML = `
+            <div class="timeline-block-header">
+                <div class="timeline-block-title">
+                    <span class="timeline-block-name">${block.title}</span>
+                    <span class="timeline-block-time">${formatTime12(block.start)} - ${formatTime12(block.end)}</span>
+                </div>
+                <span class="timeline-block-badge">${block.tag}</span>
+            </div>
+            <p class="timeline-block-description">${block.description}</p>
+            ${task ? `
+            <div class="task-block">
+                <h3>${task.title}</h3>
+                <div class="task-block-meta">
+                    <i class="far fa-flag"></i>
+                    <button class="task-remove-btn" onclick="unscheduleTask('${task.id}')" aria-label="배치 해제">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                    <div class="task-checkbox" onclick="toggleTaskStatus('${task.id}')"
+                         style="background: ${task.status === 'completed' ? 'var(--primary-color)' : 'transparent'}"></div>
+                </div>
+            </div>` : '<div class="timeline-empty">아직 배치된 할 일이 없습니다.</div>'}
+        `;
+        timelineEl.appendChild(blockEl);
+    });
 }
 
 function toggleTaskStatus(id) {
     const task = state.tasks.find(t => t.id === id);
     if (task) {
         task.status = task.status === 'completed' ? 'pending' : 'completed';
+        saveData();
+    }
+}
+
+function unscheduleTask(id) {
+    const task = state.tasks.find(t => t.id === id);
+    if (task) {
+        task.scheduledTime = null;
+        task.scheduledDate = null;
         saveData();
     }
 }
@@ -310,47 +353,58 @@ function renderTimelineSlots() {
 
     const selectedDateStr = getDateString(state.selectedDate);
 
-    // 08:00 to 20:00
-    for (let i = 8; i <= 20; i++) {
-        ['00', '30'].forEach(min => {
-            const time = `${i.toString().padStart(2, '0')}:${min}`;
-            const slot = document.createElement('div');
-            slot.className = 'time-slot drop-zone';
-            slot.setAttribute('data-time', time);
-            slot.innerHTML = `<span class="time-label">${formatTime12(time)}</span>`;
+    SCHEDULING_BLOCKS.forEach((block) => {
+        const slot = document.createElement('div');
+        slot.className = `time-slot drop-zone block-slot ${block.buffer ? 'buffer-slot' : ''}`;
+        slot.setAttribute('data-time', block.start);
+        slot.innerHTML = `
+            <div class="block-slot-header">
+                <div class="block-slot-title">
+                    <span class="block-slot-name">${block.title}</span>
+                    <span class="block-slot-time">${formatTime12(block.start)} - ${formatTime12(block.end)}</span>
+                </div>
+                <span class="block-slot-badge">${block.tag}</span>
+            </div>
+            <p class="block-slot-description">${block.description}</p>
+        `;
 
-            const task = state.tasks.find(t => t.scheduledDate === selectedDateStr && t.scheduledTime === time);
-            if (task) {
-                slot.innerHTML += `<div class="task-item-embedded" style="background:#eef; padding:4px; border-radius:4px; margin-left:10px; font-size:12px;">${task.title}</div>`;
-            }
-            container.appendChild(slot);
+        const task = state.tasks.find(t => t.scheduledDate === selectedDateStr && t.scheduledTime === block.start);
+        if (task) {
+            slot.innerHTML += `
+                <div class="task-item-embedded scheduled-task-chip">
+                    <span>${task.title}</span>
+                    <button class="task-remove-btn" onclick="unscheduleTask('${task.id}')" aria-label="배치 해제">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+            `;
+        }
 
-            // Init Sortable for this slot
-            new Sortable(slot, {
-                group: { name: 'scheduling', pull: false, put: true },
-                sort: false,
-                onAdd: function (evt) {
-                    const taskId = evt.item.getAttribute('data-id');
-                    const time = slot.getAttribute('data-time');
-                    const task = state.tasks.find(t => t.id === taskId);
+        container.appendChild(slot);
 
-                    if (task) {
-                        const dateStr = getDateString(state.selectedDate);
-                        // Clear any other task already in this slot for this date
-                        state.tasks.forEach(t => {
-                            if (t.scheduledDate === dateStr && t.scheduledTime === time) {
-                                t.scheduledTime = null;
-                                t.scheduledDate = null;
-                            }
-                        });
-                        task.scheduledTime = time;
-                        task.scheduledDate = dateStr;
-                        saveData();
-                    }
+        new Sortable(slot, {
+            group: { name: 'scheduling', pull: false, put: true },
+            sort: false,
+            onAdd: function (evt) {
+                const taskId = evt.item.getAttribute('data-id');
+                const time = slot.getAttribute('data-time');
+                const task = state.tasks.find(t => t.id === taskId);
+
+                if (task) {
+                    const dateStr = getDateString(state.selectedDate);
+                    state.tasks.forEach(t => {
+                        if (t.scheduledDate === dateStr && t.scheduledTime === time) {
+                            t.scheduledTime = null;
+                            t.scheduledDate = null;
+                        }
+                    });
+                    task.scheduledTime = time;
+                    task.scheduledDate = dateStr;
+                    saveData();
                 }
-            });
+            }
         });
-    }
+    });
 }
 
 // --- Interaction Logic ---
@@ -410,9 +464,19 @@ function initDragAndDrop() {
 function onReorder(evt) {
     const itemId = evt.item.getAttribute('data-id');
     const targetListId = evt.to.id;
+    const sourceListId = evt.from.id;
     const task = state.tasks.find(t => t.id === itemId);
 
     if (task) {
+        if (targetListId === 'priority-list' && sourceListId !== 'priority-list') {
+            const priorityCount = state.tasks.filter(t => t.priority === 'high').length;
+            if (priorityCount >= MAX_PRIORITY_TASKS) {
+                alert(`오늘의 핵심은 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`);
+                updateUI();
+                return;
+            }
+        }
+
         task.priority = (targetListId === 'priority-list') ? 'high' : 'medium';
         saveData();
     }

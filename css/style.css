@@ -160,6 +160,29 @@ body {
     margin-bottom: 16px;
 }
 
+.priority-limit-hint {
+    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+    transition: color 0.2s ease;
+}
+
+.task-section.priority-full h2 {
+    color: var(--primary-color);
+}
+
+.task-section.priority-full .priority-limit-hint {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.task-section.priority-full .task-list {
+    padding: 12px;
+    border: 1px dashed rgba(255, 140, 0, 0.5);
+    border-radius: var(--border-radius-md);
+    background-color: #fff8f0;
+}
+
 .task-list {
     display: flex;
     flex-direction: column;
@@ -211,6 +234,17 @@ body {
     width: 100%;
     cursor: pointer;
     margin-top: 24px;
+}
+
+.btn-primary:disabled {
+    background-color: #cfcfcf;
+    color: #ffffff;
+    cursor: not-allowed;
+}
+
+.btn-primary.btn-ready {
+    box-shadow: 0 10px 20px rgba(255, 140, 0, 0.18);
+    transform: translateY(-1px);
 }
 
 /* Profile Page */
@@ -287,6 +321,76 @@ body {
 .timeline-container {
     position: relative;
     margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.timeline-block {
+    background: linear-gradient(180deg, #fffdf9 0%, #fff7ec 100%);
+    border: 1px solid #f1dcc2;
+    border-radius: var(--border-radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.timeline-block.buffer-block {
+    background: linear-gradient(180deg, #fafbfc 0%, #f2f4f7 100%);
+    border-color: #d7dde5;
+}
+
+.timeline-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.timeline-block-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.timeline-block-name {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.timeline-block-time {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.timeline-block-badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background-color: #fff1db;
+    color: #b86a00;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.buffer-block .timeline-block-badge {
+    background-color: #e8edf3;
+    color: #4f6476;
+}
+
+.timeline-block-description {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.timeline-empty {
+    padding: 14px 16px;
+    border-radius: var(--border-radius-md);
+    background-color: rgba(255, 255, 255, 0.75);
+    border: 1px dashed var(--border-color);
+    color: var(--text-muted);
+    font-size: 13px;
 }
 
 .time-slot {
@@ -327,11 +431,24 @@ body {
 .task-block-meta {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 .task-block-meta i {
     color: var(--text-muted);
-    margin-right: 12px;
+}
+
+.task-remove-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+}
+
+.task-remove-btn:hover {
+    color: var(--primary-color);
 }
 
 .task-checkbox {
@@ -445,6 +562,13 @@ body {
     gap: 20px;
 }
 
+.schedule-block-guide {
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
 .task-list-sidebar {
     width: 60%;
     overflow-y: auto;
@@ -486,6 +610,72 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.timeline-sidebar .time-slot.block-slot {
+    gap: 8px;
+    min-height: 118px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #f1dcc2;
+    background: linear-gradient(180deg, #fffdf9 0%, #fff7ec 100%);
+}
+
+.timeline-sidebar .time-slot.block-slot.buffer-slot {
+    border-color: #d7dde5;
+    background: linear-gradient(180deg, #fafbfc 0%, #f2f4f7 100%);
+}
+
+.block-slot-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.block-slot-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.block-slot-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.block-slot-time {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.block-slot-badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background-color: #fff1db;
+    color: #b86a00;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.buffer-slot .block-slot-badge {
+    background-color: #e8edf3;
+    color: #4f6476;
+}
+
+.block-slot-description {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.task-item-embedded.scheduled-task-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 /* Drag & Drop Visuals */

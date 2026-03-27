@@ -44,8 +44,11 @@
             <h1>할 일 정리</h1>
         </header>
 
-        <div class="task-section">
+        <div class="task-section" id="priority-section">
             <h2>오늘의 핵심</h2>
+            <p id="priority-limit-hint" class="priority-limit-hint">
+                오늘의 핵심은 최대 4개까지 선택할 수 있습니다.
+            </p>
             <div class="task-list" id="priority-list">
                 <!-- 자바스크립트로 채워짐 -->
             </div>
@@ -66,7 +69,7 @@
                 style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">할 일 추가</button>
         </div>
 
-        <button class="btn-primary" onclick="showPage('schedule-your-task-page')">시간 배치하기</button>
+        <button id="open-scheduler-btn" class="btn-primary" onclick="showPage('schedule-your-task-page')">시간 배치하기</button>
     </div>
 
     <div id="profile-page" class="page container hidden">
@@ -134,6 +137,10 @@
         <header class="header">
             <h1>시간 배치</h1>
         </header>
+
+        <p class="schedule-block-guide">
+            오늘의 핵심을 아래 고정 블록에 배치하세요. 마지막 블록은 버퍼 시간으로 활용할 수 있습니다.
+        </p>
 
         <div class="schedule-layout">
             <div class="task-list-sidebar">
