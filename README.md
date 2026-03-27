@@ -3,11 +3,23 @@
 간단한 타임박싱 방식으로 하루 일정을 정리하는 스케줄 관리 PWA입니다.
 Vanilla HTML, CSS, JavaScript만으로 구성된 정적 웹앱이며, 로컬 저장소를 기본으로 사용하고 Cloudflare Pages Functions + KV를 붙이면 기기 간 동기화도 가능합니다.
 
+## 목차
+
+- [주요 기능](#주요-기능)
+- [현재 구현 범위](#현재-구현-범위)
+- [기술 스택](#기술-스택)
+- [프로젝트 구조](#프로젝트-구조)
+- [로컬 실행](#로컬-실행)
+- [Cloudflare Pages 배포](#cloudflare-pages-배포)
+- [PWA 설치](#pwa-설치)
+- [데이터 저장 방식](#데이터-저장-방식)
+- [라이선스](#라이선스)
+
 ## 주요 기능
 
 - 주간 캘린더에서 날짜 선택
 - 선택한 날짜 기준 일정 목록 확인
-- Today Priorities / Backlog로 태스크 분류
+- `오늘의 핵심` / `할 일 목록`으로 태스크 분류
 - 새 태스크 추가 및 삭제
 - 드래그 앤 드롭으로 우선순위 이동
 - 시간 슬롯에 태스크를 드롭해 일정 배정
@@ -19,15 +31,15 @@ Vanilla HTML, CSS, JavaScript만으로 구성된 정적 웹앱이며, 로컬 저
 
 현재 앱에 실제로 구현된 화면은 다음과 같습니다.
 
-- `Timeline`: 하루 타임라인과 완료 체크
-- `Calendar`: 주간 날짜 선택과 일정 목록
-- `Schedule Task`: 우선순위/백로그 관리, 태스크 추가
-- `Schedule Your Task`: 드래그 앤 드롭 스케줄링
-- `Profile`: Sync ID 표시, 카테고리별 태스크 수
+- `오늘 일정`: 하루 타임라인과 완료 체크
+- `캘린더`: 주간 날짜 선택과 일정 목록
+- `할 일 정리`: 오늘의 핵심/할 일 목록 관리, 태스크 추가
+- `시간 배치`: 드래그 앤 드롭 스케줄링
+- `내 정보`: 동기화 ID 표시, 카테고리별 태스크 수
 
 참고:
 
-- 하단 탭의 `Search`는 UI만 있으며 기능은 아직 구현되지 않았습니다.
+- 하단 탭의 `검색 예정` 영역은 UI만 있으며 기능은 아직 구현되지 않았습니다.
 - 통계용 API는 존재하지만, 프런트 화면에서 별도 대시보드로 표시되지는 않습니다.
 
 ## 기술 스택
@@ -47,12 +59,17 @@ Vanilla HTML, CSS, JavaScript만으로 구성된 정적 웹앱이며, 로컬 저
 |- manifest.json             # PWA 설정
 |- sw.js                     # 서비스 워커
 |- README.md
-|- MANUAL.md                 # 사용자용 안내 문서
 |- assets/
 |  |- favicon.svg
 |  `- profile.svg
 |- css/
 |  `- style.css              # 메인 스타일
+|- docs/
+|  |- MANUAL.md              # 사용자용 안내 문서
+|  |- TERMS.md               # 표준 용어집
+|  |- PRD.md                 # 제품 요구사항 문서
+|  |- MVP.md                 # MVP 범위 정의
+|  `- BackLog.md             # 우선순위 기반 백로그
 |- js/
 |  `- app.js                 # 상태, 렌더링, 상호작용 로직
 `- functions/
@@ -68,7 +85,7 @@ Vanilla HTML, CSS, JavaScript만으로 구성된 정적 웹앱이며, 로컬 저
 1. 프로젝트 폴더를 엽니다.
 2. `index.html`을 브라우저에서 열거나 Live Server로 실행합니다.
 
-Cloudflare Functions 연동 없이 실행하면 데이터는 브라우저의 Local Storage에 저장됩니다.
+Cloudflare Functions 연동 없이 실행하면 데이터는 브라우저의 `localStorage`에 저장됩니다.
 
 ## Cloudflare Pages 배포
 
@@ -92,7 +109,7 @@ Cloudflare Functions 연동 없이 실행하면 데이터는 브라우저의 Loc
 ## 데이터 저장 방식
 
 - 기본 저장: `localStorage`
-- 선택 동기화: Sync ID 기반 Cloudflare KV 저장
+- 선택 동기화: 동기화 ID 기반 Cloudflare KV 저장
 - 오프라인: 서비스 워커가 앱 셸 파일을 캐시
 
 주의:

@@ -1,4 +1,4 @@
-// --- State Management ---
+// --- 상태 관리 ---
 const state = {
     currentDate: new Date(),
     selectedDate: new Date(),
@@ -13,7 +13,7 @@ const state = {
 const STORAGE_KEY = 'timebox_app_data';
 const SYNC_ID_KEY = 'timebox_sync_id';
 
-// --- Sync & Data Logic ---
+// --- 동기화 및 데이터 로직 ---
 
 function initSyncId() {
     let id = localStorage.getItem(SYNC_ID_KEY);
@@ -31,48 +31,41 @@ function updateSyncUI() {
 }
 
 function editSyncId() {
-    const newId = prompt("Enter Sync ID to link another device:", state.syncId);
+    const newId = prompt("다른 기기와 연결할 동기화 ID를 입력하세요:", state.syncId);
     if (newId && newId !== state.syncId) {
         state.syncId = newId;
         localStorage.setItem(SYNC_ID_KEY, newId);
         updateSyncUI();
-        loadData(); // Reload data for new ID
+        loadData(); // 새 ID 기준으로 데이터 다시 불러오기
     }
 }
 
 function copySyncId() {
     navigator.clipboard.writeText(state.syncId);
-    alert("Sync ID copied to clipboard!");
+    alert("동기화 ID를 복사했습니다.");
 }
 
 async function loadData() {
-    // 1. Load Local Cache
+    // 1. 로컬 저장 데이터 불러오기
     const localData = localStorage.getItem(STORAGE_KEY);
     if (localData) {
         const parsed = JSON.parse(localData);
         state.tasks = parsed.tasks || [];
-        updateUI(); // Immediate render
+        updateUI(); // 즉시 화면 반영
     }
 
-    // 2. Fetch from Cloudflare KV (Sync)
+    // 2. Cloudflare KV에서 동기화 데이터 불러오기
     try {
-        // We use current date format YYYY-MM-DD for simpler daily syncing 
-        // OR simply store everything under one key for this simple app. 
-        // Based on functions/api/data.js: key = user_{id}_{date}
-        // To keep it simple and sync ALL tasks, we might need a 'master' key or just use 'current' date for main list.
-        // Let's assume we sync 'all' tasks to a single date key 'global' or similar for this simple app structure, 
-        // OR modify the data.js strategies.
-        // Given existing stats.js logic uses date keys for heatmap, we should probably save daily data.
-        // BUT our state.tasks has ALL tasks.
-        // STRATEGY: We will use 'global' as the date for the main task list to sync everything.
+        // 단순한 구조를 유지하기 위해 전체 태스크 목록을 'global' 키 하나로 동기화한다.
+        // 이후 필요하면 날짜별 저장 전략으로 확장할 수 있다.
 
         const response = await fetch(`/api/data?id=${state.syncId}&date=global`);
         if (response.ok) {
             const data = await response.json();
             if (data && Array.isArray(data)) {
-                // Merge strategies could be complex, for now, server wins if exists
+                // 충돌 병합은 단순화하고, 서버 데이터가 있으면 우선 적용한다.
                 state.tasks = data;
-                saveData(false); // Save to local but don't sync back immediately to avoid loop
+                saveData(false); // 로컬에는 저장하되 즉시 재동기화는 하지 않음
                 updateUI();
             }
         }
@@ -80,23 +73,23 @@ async function loadData() {
         console.error("Sync failed:", e);
     }
 
-    // Initial Mock Data if absolutely nothing
+    // 아무 데이터도 없을 때 기본 예시 데이터 사용
     if (!state.tasks.length && !localData) {
         state.tasks = [
-            { id: 't1', title: 'Team Meeting', category: 'work', status: 'pending', priority: 'high', scheduledTime: '16:30' },
-            { id: 't2', title: 'Grocery Shopping', category: 'personal', status: 'pending', priority: 'medium', scheduledTime: '17:30' }
+            { id: 't1', title: '팀 미팅', category: 'work', status: 'pending', priority: 'high', scheduledTime: '16:30' },
+            { id: 't2', title: '장보기', category: 'personal', status: 'pending', priority: 'medium', scheduledTime: '17:30' }
         ];
         saveData();
     }
 }
 
 async function saveData(sync = true) {
-    // 1. Save Local
+    // 1. 로컬 저장
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
         tasks: state.tasks
     }));
 
-    // 2. Sync to KV
+    // 2. KV로 동기화
     if (sync) {
         try {
             await fetch('/api/data', {
@@ -104,9 +97,9 @@ async function saveData(sync = true) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     id: state.syncId,
-                    date: 'global', // Syncing all tasks to one key
+                    date: 'global', // 전체 태스크를 하나의 키로 동기화
                     data: state.tasks,
-                    level: calculateDailyActivity() // For heatmap stats
+                    level: calculateDailyActivity() // 활동량 통계용 값
                 })
             });
         } catch (e) {
@@ -166,11 +159,9 @@ function renderCalendar() {
         calendarEl.appendChild(dayEl);
     }
 
-    const options = { weekday: 'long', day: '2-digit', month: 'long' };
-    // Custom format to match "Wednesday, 09 October" (GB locale often gives Day Month)
-    // Or manually construct if needed. Let's try en-GB for Day Month order.
+    const options = { weekday: 'long', day: 'numeric', month: 'long' };
     document.getElementById('timeline-date-header').textContent =
-        state.selectedDate.toLocaleDateString('en-GB', options);
+        state.selectedDate.toLocaleDateString('ko-KR', options);
 }
 
 // 2. Schedule List (Home Page)
@@ -184,7 +175,7 @@ function renderScheduleList() {
     ).sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
 
     if (scheduledTasks.length === 0) {
-        listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No tasks scheduled for this date.</p>';
+        listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">선택한 날짜에 배치된 일정이 없습니다.</p>';
         return;
     }
 
@@ -199,7 +190,7 @@ function renderScheduleList() {
             <div class="schedule-meta">
                 <i class="far fa-flag"></i>
                 <span class="status ${task.status === 'completed' ? 'upcoming' : 'pending'}">
-                    ${task.status === 'completed' ? 'Done' : 'Pending'}
+                    ${task.status === 'completed' ? '완료' : '진행 전'}
                 </span>
             </div>
         `;
@@ -250,7 +241,7 @@ function renderTaskLists() {
 
 function deleteTask(id, event) {
     if (event) event.stopPropagation();
-    if (confirm('Delete this task?')) {
+    if (confirm('이 할 일을 삭제할까요?')) {
         state.tasks = state.tasks.filter(t => t.id !== id);
         saveData();
     }
@@ -306,10 +297,10 @@ function renderCategoryCounts() {
         if (counts[t.category] !== undefined) counts[t.category]++;
     });
 
-    document.getElementById('cat-personal-count').innerText = `${counts.personal} Task`;
-    document.getElementById('cat-meet-count').innerText = `${counts.meet} Task`;
-    document.getElementById('cat-event-count').innerText = `${counts.event} Task`;
-    document.getElementById('cat-work-count').innerText = `${counts.work} Task`;
+    document.getElementById('cat-personal-count').innerText = `${counts.personal}개`;
+    document.getElementById('cat-meet-count').innerText = `${counts.meet}개`;
+    document.getElementById('cat-event-count').innerText = `${counts.event}개`;
+    document.getElementById('cat-work-count').innerText = `${counts.work}개`;
 }
 
 // 6. Timeline Slots
@@ -393,7 +384,7 @@ function resetSchedule() {
     saveData();
 }
 
-// Initialize Drag & Drop
+// 드래그 앤 드롭 초기화
 function initDragAndDrop() {
     new Sortable(document.getElementById('priority-list'), { group: 'shared', animation: 150, onEnd: onReorder });
     new Sortable(document.getElementById('backlog-list'), { group: 'shared', animation: 150, onEnd: onReorder });

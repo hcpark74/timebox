@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedule App</title>
+    <title>Timebox Flow</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-    <!-- Drag & Drop Library -->
+    <!-- 드래그 앤 드롭 라이브러리 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 
@@ -18,20 +18,20 @@
 
     <div id="calendar-page" class="page container hidden">
         <header class="header">
-            <h1>Calendar</h1>
+            <h1>캘린더</h1>
             <div class="header-icon">
                 <i class="far fa-calendar-alt"></i>
             </div>
         </header>
 
-        <!-- Dynamic Calendar -->
+        <!-- 자바스크립트로 채워짐 -->
         <div class="week-calendar" id="week-calendar">
-            <!-- Populated by JS -->
+            <!-- 자바스크립트로 채워짐 -->
         </div>
 
-        <!-- Dynamic Schedule List -->
+        <!-- 자바스크립트로 채워짐 -->
         <div class="schedule-list" id="schedule-list">
-            <!-- Populated by JS -->
+            <!-- 자바스크립트로 채워짐 -->
         </div>
 
         <div class="fab" onclick="showPage('schedule-task-page')">
@@ -41,51 +41,51 @@
 
     <div id="schedule-task-page" class="page container hidden">
         <header class="header">
-            <h1>Schedule Task</h1>
+            <h1>할 일 정리</h1>
         </header>
 
         <div class="task-section">
-            <h2>Today's Priorities</h2>
+            <h2>오늘의 핵심</h2>
             <div class="task-list" id="priority-list">
-                <!-- Populated by JS -->
+                <!-- 자바스크립트로 채워짐 -->
             </div>
         </div>
 
         <div class="task-section" style="margin-top: 24px;">
-            <h2>Backlog</h2>
+            <h2>할 일 목록</h2>
             <div class="task-list" id="backlog-list">
-                <!-- Populated by JS -->
+                <!-- 자바스크립트로 채워짐 -->
             </div>
         </div>
 
-        <!-- Quick Add Task -->
+        <!-- 빠른 할 일 추가 -->
         <div class="task-input-container" style="margin-top: 20px;">
-            <input type="text" id="new-task-input" placeholder="New task name..."
+            <input type="text" id="new-task-input" placeholder="할 일을 입력하세요"
                 style="padding: 12px; width: 70%; border: 1px solid #ddd; border-radius: 8px;">
             <button onclick="addNewTask()"
-                style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">Add Task</button>
+                style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">할 일 추가</button>
         </div>
 
-        <button class="btn-primary" onclick="showPage('schedule-your-task-page')">Open Scheduler</button>
+        <button class="btn-primary" onclick="showPage('schedule-your-task-page')">시간 배치하기</button>
     </div>
 
     <div id="profile-page" class="page container hidden">
         <header class="header">
-            <h1>Profile</h1>
+            <h1>내 정보</h1>
             <div class="header-icon">
                 <i class="far fa-bell"></i>
             </div>
         </header>
 
         <div class="profile-card">
-            <img src="assets/profile.svg" alt="Profile" class="profile-img">
+            <img src="assets/profile.svg" alt="프로필" class="profile-img">
             <div class="profile-info">
-                <h2>Hey, Jayraj</h2>
-                <p>Have a great day!</p>
+                <h2>안녕하세요, Jayraj</h2>
+                <p>오늘도 좋은 하루 보내세요.</p>
                 <div style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">
-                    Sync ID: <span id="sync-id-display"
+                    동기화 ID: <span id="sync-id-display"
                         style="font-family: monospace; font-weight: bold; cursor: pointer;"
-                        onclick="copySyncId()">Loading...</span>
+                        onclick="copySyncId()">불러오는 중...</span>
                     <i class="fas fa-edit" onclick="editSyncId()" style="margin-left: 8px; cursor: pointer;"></i>
                 </div>
             </div>
@@ -93,35 +93,35 @@
         </div>
 
         <div class="task-section">
-            <h2>Category</h2>
+            <h2>카테고리</h2>
             <div class="category-grid">
                 <div class="category-card">
                     <div class="category-icon"><i class="far fa-calendar-check"></i></div>
-                    <h3>Personal</h3>
-                    <p id="cat-personal-count">0 Task</p>
+                    <h3>개인</h3>
+                    <p id="cat-personal-count">0개</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-users"></i></div>
-                    <h3>Meet</h3>
-                    <p id="cat-meet-count">0 Task</p>
+                    <h3>미팅</h3>
+                    <p id="cat-meet-count">0개</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>Event</h3>
-                    <p id="cat-event-count">0 Task</p>
+                    <h3>이벤트</h3>
+                    <p id="cat-event-count">0개</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-briefcase"></i></div>
-                    <h3>Work</h3>
-                    <p id="cat-work-count">0 Task</p>
+                    <h3>업무</h3>
+                    <p id="cat-work-count">0개</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="far fa-smile"></i></div>
-                    <h3>Fun</h3>
+                    <h3>휴식</h3>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-mug-hot"></i></div>
-                    <h3>Party</h3>
+                    <h3>기타</h3>
                 </div>
             </div>
         </div>
@@ -132,40 +132,40 @@
 
     <div id="schedule-your-task-page" class="page container hidden">
         <header class="header">
-            <h1>Schedule Your Task</h1>
+            <h1>시간 배치</h1>
         </header>
 
         <div class="schedule-layout">
             <div class="task-list-sidebar">
                 <div class="task-list" id="draggable-source-list">
-                    <!-- Populated by JS (Unscheduled Tasks) -->
+                    <!-- 자바스크립트로 채워짐: 미배정 태스크 -->
                 </div>
             </div>
             <div class="timeline-sidebar" id="timeline-slots">
-                <!-- Time slots populated by JS -->
+                <!-- 자바스크립트로 채워짐: 시간 슬롯 -->
             </div>
         </div>
 
         <div class="btn-group">
-            <button class="btn-secondary" onclick="resetSchedule()">Re-Arrange</button>
+            <button class="btn-secondary" onclick="resetSchedule()">다시 배치</button>
             <button class="btn-primary" style="margin-top: 0; flex: 1;"
-                onclick="showPage('timeline-page')">View Timeline</button>
+                onclick="showPage('timeline-page')">오늘 일정 보기</button>
         </div>
     </div>
 
 
     <div id="timeline-page" class="page container">
         <header class="header">
-            <h1>Timeline</h1>
+            <h1>오늘 일정</h1>
             <div class="header-icon btn-header-orange" onclick="showPage('calendar-page')">
                 <i class="far fa-calendar-alt"></i>
             </div>
         </header>
 
-        <h3 id="timeline-date-header">Wednesday, 09 October</h3>
+        <h3 id="timeline-date-header">10월 9일 수요일</h3>
 
         <div class="timeline-container" id="timeline-view">
-            <!-- Populated by JS -->
+            <!-- 자바스크립트로 채워짐 -->
         </div>
         <div class="fab" onclick="showPage('schedule-task-page')">
             <i class="fas fa-plus"></i>
@@ -176,19 +176,19 @@
     <nav class="bottom-tab-bar">
         <a href="#" class="tab-item active-calendar" onclick="showPage('timeline-page'); setActiveTab(this)">
             <i class="fas fa-clock"></i>
-            <span>Timeline</span>
+            <span>오늘 일정</span>
         </a>
         <a href="#" class="tab-item" onclick="showPage('calendar-page'); setActiveTab(this)">
             <i class="far fa-calendar-alt"></i>
-            <span>Calendar</span>
+            <span>캘린더</span>
         </a>
-        <a href="#" class="tab-item tab-item-disabled" onclick="return false;" aria-disabled="true" title="Search coming soon">
+        <a href="#" class="tab-item tab-item-disabled" onclick="return false;" aria-disabled="true" title="검색 기능 준비 중">
             <i class="fas fa-search"></i>
-            <span>Search Soon</span>
+            <span>검색 예정</span>
         </a>
         <a href="#" class="tab-item" onclick="showPage('profile-page'); setActiveTab(this)">
             <i class="far fa-user"></i>
-            <span>Profile</span>
+            <span>내 정보</span>
         </a>
     </nav>
 
