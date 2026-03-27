@@ -166,8 +166,11 @@ function renderCalendar() {
         calendarEl.appendChild(dayEl);
     }
 
+    const options = { weekday: 'long', day: '2-digit', month: 'long' };
+    // Custom format to match "Wednesday, 09 October" (GB locale often gives Day Month)
+    // Or manually construct if needed. Let's try en-GB for Day Month order.
     document.getElementById('timeline-date-header').textContent =
-        state.selectedDate.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
+        state.selectedDate.toLocaleDateString('en-GB', options);
 }
 
 // 2. Schedule List (Home Page)
@@ -181,7 +184,7 @@ function renderScheduleList() {
     ).sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
 
     if (scheduledTasks.length === 0) {
-        listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No tasks scheduled.</p>';
+        listEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No tasks scheduled for this date.</p>';
         return;
     }
 

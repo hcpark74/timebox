@@ -16,7 +16,7 @@
 
 <body>
 
-    <div id="calendar-page" class="page container">
+    <div id="calendar-page" class="page container hidden">
         <header class="header">
             <h1>Calendar</h1>
             <div class="header-icon">
@@ -41,7 +41,7 @@
 
     <div id="schedule-task-page" class="page container hidden">
         <header class="header">
-            <h1>Schedule task</h1>
+            <h1>Schedule Task</h1>
         </header>
 
         <div class="task-section">
@@ -63,10 +63,10 @@
             <input type="text" id="new-task-input" placeholder="New task name..."
                 style="padding: 12px; width: 70%; border: 1px solid #ddd; border-radius: 8px;">
             <button onclick="addNewTask()"
-                style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">Add</button>
+                style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">Add Task</button>
         </div>
 
-        <button class="btn-primary" onclick="showPage('schedule-your-task-page')">Let's Schedule</button>
+        <button class="btn-primary" onclick="showPage('schedule-your-task-page')">Open Scheduler</button>
     </div>
 
     <div id="profile-page" class="page container hidden">
@@ -147,17 +147,17 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn-secondary" onclick="resetSchedule()">Reset</button>
+            <button class="btn-secondary" onclick="resetSchedule()">Re-Arrange</button>
             <button class="btn-primary" style="margin-top: 0; flex: 1;"
-                onclick="showPage('timeline-page')">Schedule</button>
+                onclick="showPage('timeline-page')">View Timeline</button>
         </div>
     </div>
 
 
-    <div id="timeline-page" class="page container hidden">
+    <div id="timeline-page" class="page container">
         <header class="header">
             <h1>Timeline</h1>
-            <div class="header-icon">
+            <div class="header-icon btn-header-orange" onclick="showPage('calendar-page')">
                 <i class="far fa-calendar-alt"></i>
             </div>
         </header>
@@ -175,16 +175,16 @@
 
     <nav class="bottom-tab-bar">
         <a href="#" class="tab-item active-calendar" onclick="showPage('timeline-page'); setActiveTab(this)">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
+            <i class="fas fa-clock"></i>
+            <span>Timeline</span>
         </a>
         <a href="#" class="tab-item" onclick="showPage('calendar-page'); setActiveTab(this)">
             <i class="far fa-calendar-alt"></i>
             <span>Calendar</span>
         </a>
-        <a href="#" class="tab-item" onclick="setActiveTab(this)">
+        <a href="#" class="tab-item tab-item-disabled" onclick="return false;" aria-disabled="true" title="Search coming soon">
             <i class="fas fa-search"></i>
-            <span>Search</span>
+            <span>Search Soon</span>
         </a>
         <a href="#" class="tab-item" onclick="showPage('profile-page'); setActiveTab(this)">
             <i class="far fa-user"></i>
