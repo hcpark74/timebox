@@ -2,32 +2,46 @@ import { SCHEDULING_BLOCKS, state, refreshUI } from "../state/store.js";
 import { announceStatus } from "../lib/a11y.js";
 import { formatTime12, getDateString, getStartOfWeek, isSameDate } from "../lib/date.js";
 
-export function selectCalendarDate(dateString, shouldAnnounce = true) {
-    const nextDate = new Date(dateString);
+let plannerTransitionTimer = null;
 
-    if (Number.isNaN(nextDate.getTime())) {
+function triggerPlannerWeekTransition() {
+    const targets = document.querySelectorAll(".planner-header-card, .schedule-status-bar, .schedule-layout");
+
+    if (!targets.length) {
         return;
     }
 
-    state.selectedDate = nextDate;
-    refreshUI();
-
-    if (shouldAnnounce) {
-        announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 일정을 확인합니다.`);
+    if (plannerTransitionTimer) {
+        window.clearTimeout(plannerTransitionTimer);
     }
+
+    targets.forEach((target) => target.classList.remove("is-week-transitioning"));
+
+    window.requestAnimationFrame(() => {
+        targets.forEach((target) => target.classList.add("is-week-transitioning"));
+
+        plannerTransitionTimer = window.setTimeout(() => {
+            targets.forEach((target) => target.classList.remove("is-week-transitioning"));
+        }, 220);
+    });
 }
 
-export function renderCalendar() {
-    const calendarElement = document.getElementById("week-calendar");
+function renderWeekCalendar(targetId, options = {}) {
+    const calendarElement = document.getElementById(targetId);
 
     if (!calendarElement) {
         return;
     }
 
-    calendarElement.innerHTML = "";
+    const { compact = false } = options;
 
-    const startOfWeek = getStartOfWeek(state.currentDate);
-    const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    calendarElement.innerHTML = "";
+    calendarElement.classList.toggle("week-calendar-compact", compact);
+
+    const startOfWeek = getStartOfWeek(state.selectedDate);
+    const dayNames = compact
+        ? ["월", "화", "수", "목", "금", "토", "일"]
+        : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     for (let index = 0; index < 7; index += 1) {
         const date = new Date(startOfWeek);
@@ -36,7 +50,7 @@ export function renderCalendar() {
         const isSelected = isSameDate(date, state.selectedDate);
         const dayElement = document.createElement("button");
         dayElement.type = "button";
-        dayElement.className = `day-column ${isSelected ? "active" : ""}`;
+        dayElement.className = `day-column ${compact ? "day-column-compact" : ""} ${isSelected ? "active" : ""}`.trim();
         dayElement.setAttribute("data-action", "select-date");
         dayElement.setAttribute("data-date", getDateString(date));
         dayElement.setAttribute("aria-label", date.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" }));
@@ -53,12 +67,52 @@ export function renderCalendar() {
 
         calendarElement.appendChild(dayElement);
     }
+}
+
+export function selectCalendarDate(dateString, shouldAnnounce = true) {
+    const nextDate = new Date(dateString);
+
+    if (Number.isNaN(nextDate.getTime())) {
+        return;
+    }
+
+    state.selectedDate = nextDate;
+    refreshUI();
+    triggerPlannerWeekTransition();
+
+    if (shouldAnnounce) {
+        announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 일정을 확인합니다.`);
+    }
+}
+
+export function shiftSelectedWeek(direction) {
+    const nextDate = new Date(state.selectedDate);
+    const diff = direction === "prev" ? -7 : 7;
+
+    nextDate.setDate(nextDate.getDate() + diff);
+    state.selectedDate = nextDate;
+    state.currentDate = new Date(nextDate);
+    refreshUI();
+    triggerPlannerWeekTransition();
+    announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 주차를 확인합니다.`);
+}
+
+export function renderCalendar() {
+    state.currentDate = new Date(state.selectedDate);
+    renderWeekCalendar("week-calendar");
+    renderWeekCalendar("schedule-week-calendar", { compact: true });
 
     const timelineHeader = document.getElementById("timeline-date-header");
+    const scheduleSelectedDate = document.getElementById("schedule-selected-date");
 
     if (timelineHeader) {
         const options = { weekday: "long", day: "numeric", month: "long" };
         timelineHeader.textContent = state.selectedDate.toLocaleDateString("ko-KR", options);
+    }
+
+    if (scheduleSelectedDate) {
+        const options = { weekday: "long", day: "numeric", month: "long" };
+        scheduleSelectedDate.textContent = state.selectedDate.toLocaleDateString("ko-KR", options);
     }
 }
 

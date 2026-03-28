@@ -73,7 +73,20 @@ export function renderTimelineSlots() {
         if (task) {
             slot.innerHTML += `
                 <div class="task-item-embedded scheduled-task-chip">
-                    <span>${task.title}</span>
+                    <div class="scheduled-task-content">
+                        <span>${task.title}</span>
+                        <div class="scheduled-task-controls">
+                            <label class="sr-only" for="scheduled-move-${task.id}">${task.title} 이동 블록 선택</label>
+                            <select id="scheduled-move-${task.id}" class="schedule-select schedule-select-inline" data-task-id="${task.id}" aria-label="${task.title} 이동 블록 선택">
+                                ${SCHEDULING_BLOCKS.map((optionBlock) => `
+                                    <option value="${optionBlock.start}" ${optionBlock.start === block.start ? "selected" : ""}>
+                                        ${optionBlock.title} (${formatTime12(optionBlock.start)})
+                                    </option>
+                                `).join("")}
+                            </select>
+                            <button type="button" class="schedule-assign-button schedule-move-button" data-action="move-scheduled-task" data-task-id="${task.id}" aria-label="${task.title} 다른 블록으로 이동">이동</button>
+                        </div>
+                    </div>
                     <button type="button" class="task-remove-btn" data-action="unschedule-task" data-task-id="${task.id}" aria-label="배치 해제">
                         <i class="fas fa-xmark"></i>
                     </button>

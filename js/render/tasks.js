@@ -1,6 +1,6 @@
-import { MAX_PRIORITY_TASKS, state } from "../state/store.js";
+import { MAX_PRIORITY_TASKS, SCHEDULING_BLOCKS, state } from "../state/store.js";
 import { announceStatus } from "../lib/a11y.js";
-import { getDateString } from "../lib/date.js";
+import { formatTime12, getDateString } from "../lib/date.js";
 
 let isBacklogExpanded = false;
 
@@ -22,6 +22,9 @@ export function renderTaskLists() {
     const backlogToggle = document.querySelector('[data-action="toggle-backlog"]');
     const backlogToggleCount = document.getElementById("backlog-toggle-count");
     const dragSourceElement = document.getElementById("draggable-source-list");
+    const scheduleStatusPriority = document.getElementById("schedule-status-priority");
+    const scheduleStatusAssigned = document.getElementById("schedule-status-assigned");
+    const scheduleStatusUnassigned = document.getElementById("schedule-status-unassigned");
 
     if (!priorityElement || !backlogElement || !dragSourceElement) {
         return;
@@ -78,9 +81,22 @@ export function renderTaskLists() {
 
         if (!task.scheduledTime) {
             const dragElement = document.createElement("div");
-            dragElement.className = "task-item";
+            dragElement.className = "task-item task-item-scheduler";
             dragElement.setAttribute("data-id", task.id);
-            dragElement.innerHTML = `<div class="task-icon"><i class="fas fa-briefcase"></i></div><span class="task-name">${task.title}</span>`;
+            dragElement.innerHTML = `
+                <div class="task-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="scheduler-task-content">
+                    <span class="task-name">${task.title}</span>
+                    <div class="scheduler-manual-controls">
+                        <label class="sr-only" for="schedule-select-${task.id}">${task.title} 배치 블록 선택</label>
+                        <select id="schedule-select-${task.id}" class="schedule-select" data-task-id="${task.id}" aria-label="${task.title} 배치 블록 선택">
+                            <option value="">블록 선택</option>
+                            ${SCHEDULING_BLOCKS.map((block) => `<option value="${block.start}">${block.title} (${formatTime12(block.start)})</option>`).join("")}
+                        </select>
+                        <button type="button" class="schedule-assign-button" data-action="assign-task-to-slot" data-task-id="${task.id}" aria-label="${task.title} 배치하기">배치</button>
+                    </div>
+                </div>
+            `;
             dragSourceElement.appendChild(dragElement);
         }
     });
@@ -90,6 +106,7 @@ export function renderTaskLists() {
     const selectedDate = getDateString(state.selectedDate);
     const scheduledPriorityCount = state.tasks.filter((task) => task.priority === "high" && task.scheduledDate === selectedDate && task.scheduledTime).length;
     const completedScheduledPriorityCount = state.tasks.filter((task) => task.priority === "high" && task.scheduledDate === selectedDate && task.scheduledTime && task.status === "completed").length;
+    const unassignedPriorityCount = priorityTasks.filter((task) => !(task.scheduledDate === selectedDate && task.scheduledTime)).length;
     const isPriorityFull = priorityCount >= MAX_PRIORITY_TASKS;
 
     if (prioritySectionElement) {
@@ -115,6 +132,20 @@ export function renderTaskLists() {
     }
 
     backlogElement.classList.toggle("hidden", !isBacklogExpanded);
+
+    if (scheduleStatusPriority) {
+        scheduleStatusPriority.textContent = `핵심 ${priorityCount}개`;
+    }
+
+    if (scheduleStatusAssigned) {
+        scheduleStatusAssigned.textContent = `배치 ${scheduledPriorityCount}개`;
+        scheduleStatusAssigned.classList.toggle("is-strong", scheduledPriorityCount > 0);
+    }
+
+    if (scheduleStatusUnassigned) {
+        scheduleStatusUnassigned.textContent = `미배정 ${unassignedPriorityCount}개`;
+        scheduleStatusUnassigned.classList.toggle("is-warning", unassignedPriorityCount > 0);
+    }
 
     if (priorityHintElement) {
         if (isPriorityFull) {

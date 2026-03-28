@@ -155,9 +155,33 @@
             <h1>시간 배치</h1>
         </header>
 
+        <div class="planner-header-card">
+            <div class="planner-header-top">
+                <p class="planner-header-label">이번 주 플래너</p>
+                <div class="planner-week-nav" aria-label="주간 이동">
+                    <button type="button" class="planner-week-button" data-action="shift-week" data-direction="prev" aria-label="이전 주 보기">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="planner-week-button" data-action="shift-week" data-direction="next" aria-label="다음 주 보기">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <h2 id="schedule-selected-date" class="planner-header-date">3월 28일 토요일</h2>
+            <div class="week-calendar week-calendar-compact" id="schedule-week-calendar">
+                <!-- 자바스크립트로 채워짐 -->
+            </div>
+        </div>
+
         <p class="schedule-block-guide">
             오늘의 핵심을 아래 고정 블록에 배치하세요. 마지막 블록은 버퍼 시간으로 활용할 수 있습니다.
         </p>
+
+        <div class="schedule-status-bar" id="schedule-status-bar" aria-label="시간 배치 상태 요약">
+            <span id="schedule-status-priority" class="schedule-status-pill">핵심 0개</span>
+            <span id="schedule-status-assigned" class="schedule-status-pill">배치 0개</span>
+            <button type="button" id="schedule-status-unassigned" class="schedule-status-pill schedule-status-button" data-action="scroll-to-unassigned">미배정 0개</button>
+        </div>
 
         <div class="schedule-layout">
             <div class="task-list-sidebar">

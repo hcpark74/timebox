@@ -86,6 +86,11 @@ body {
     margin-bottom: 24px;
 }
 
+.week-calendar-compact {
+    gap: 8px;
+    margin-bottom: 0;
+}
+
 .day-column {
     display: flex;
     flex-direction: column;
@@ -120,6 +125,120 @@ body {
 .day-column .day-number {
     font-size: 18px;
     font-weight: 600;
+}
+
+.day-column-compact {
+    flex: 1;
+    padding: 12px 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 0 0 1px rgba(241, 220, 194, 0.9);
+}
+
+.day-column-compact .day-name {
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.day-column-compact .day-number {
+    font-size: 16px;
+}
+
+.planner-header-card {
+    margin-bottom: 16px;
+    padding: 18px;
+    border: 1px solid #f1dcc2;
+    border-radius: var(--border-radius-lg);
+    background: linear-gradient(180deg, #fffdf9 0%, #fff7ec 100%);
+    box-shadow: var(--shadow-sm);
+}
+
+.planner-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.planner-header-label {
+    margin-bottom: 6px;
+    color: #b86a00;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.planner-header-date {
+    margin-bottom: 14px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.planner-week-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.planner-week-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.88);
+    color: #b86a00;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(241, 220, 194, 0.95);
+}
+
+.planner-week-button:focus-visible,
+.planner-week-button:hover {
+    outline: 3px solid rgba(255, 140, 0, 0.18);
+    outline-offset: 2px;
+    background-color: #fff4e5;
+}
+
+.planner-header-card,
+.schedule-status-bar,
+.schedule-layout {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.planner-header-card.is-week-transitioning,
+.schedule-status-bar.is-week-transitioning,
+.schedule-layout.is-week-transitioning {
+    opacity: 0.72;
+    transform: translateY(2px);
+}
+
+@media (max-width: 420px) {
+    .planner-header-card {
+        padding: 16px 14px;
+    }
+
+    .planner-header-top {
+        align-items: flex-start;
+    }
+
+    .week-calendar-compact {
+        gap: 6px;
+    }
+
+    .day-column-compact {
+        padding: 10px 4px;
+    }
+
+    .day-column-compact .day-name {
+        font-size: 11px;
+    }
+
+    .day-column-compact .day-number {
+        font-size: 15px;
+    }
+
+    .planner-header-date {
+        font-size: 20px;
+    }
 }
 
 .schedule-list {
@@ -344,6 +463,10 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.task-item-scheduler {
+    align-items: flex-start;
+}
+
 .drag-handle {
     color: var(--text-muted);
     margin-right: 16px;
@@ -373,6 +496,60 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+}
+
+.scheduler-task-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scheduler-manual-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.schedule-select {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font: inherit;
+    color: var(--text-dark);
+    background-color: var(--bg-white);
+}
+
+.schedule-assign-button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background-color: var(--primary-color);
+    color: var(--bg-white);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.schedule-select:focus-visible,
+.schedule-assign-button:focus-visible {
+    outline: 3px solid rgba(255, 140, 0, 0.28);
+    outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+    .scheduler-manual-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .schedule-assign-button {
+        width: 100%;
+    }
 }
 
 .task-move-button,
@@ -871,6 +1048,45 @@ body {
     line-height: 1.5;
 }
 
+.schedule-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.schedule-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background-color: #fff7ec;
+    color: #7a5a2b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.schedule-status-button {
+    border: none;
+    cursor: pointer;
+}
+
+.schedule-status-button:focus-visible {
+    outline: 3px solid rgba(255, 140, 0, 0.28);
+    outline-offset: 2px;
+}
+
+.schedule-status-pill.is-strong {
+    background-color: #eefaf1;
+    color: #1f7a48;
+}
+
+.schedule-status-pill.is-warning {
+    background-color: #fff3e6;
+    color: #b86100;
+}
+
 .task-list-sidebar {
     width: 60%;
     overflow-y: auto;
@@ -978,6 +1194,41 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+}
+
+.scheduled-task-content {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.scheduled-task-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.schedule-select-inline {
+    min-width: 170px;
+}
+
+.schedule-move-button {
+    padding-inline: 10px;
+}
+
+@media (max-width: 420px) {
+    .scheduled-task-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .schedule-select-inline,
+    .schedule-move-button {
+        width: 100%;
+    }
 }
 
 /* Drag & Drop Visuals */
