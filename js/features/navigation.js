@@ -29,14 +29,6 @@ export function showPage(pageId) {
     document.getElementById(pageId).classList.remove("hidden");
     syncActiveTabByPage(pageId);
 
-    document.querySelectorAll(".fab").forEach((fab) => {
-        if (pageId === "profile-page" || pageId === "timeline-page") {
-            fab.classList.add("dark");
-        } else {
-            fab.classList.remove("dark");
-        }
-    });
-
     window.scrollTo(0, 0);
 }
 

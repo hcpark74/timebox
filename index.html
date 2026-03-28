@@ -40,9 +40,6 @@
             <!-- 자바스크립트로 채워짐 -->
         </div>
 
-        <button type="button" class="fab" data-action="show-page" data-page="schedule-task-page" aria-label="할 일 정리 열기">
-            <i class="fas fa-plus"></i>
-        </button>
     </div>
 
     <div id="schedule-task-page" class="page container hidden">
@@ -145,9 +142,6 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="fab" data-action="show-page" data-page="schedule-task-page" aria-label="할 일 정리 열기">
-            <i class="fas fa-plus"></i>
-        </button>
     </div>
 
     <div id="schedule-your-task-page" class="page container hidden">
@@ -210,9 +204,6 @@
         <div class="timeline-container" id="timeline-view">
             <!-- 자바스크립트로 채워짐 -->
         </div>
-        <button type="button" class="fab" data-action="show-page" data-page="schedule-task-page" aria-label="할 일 정리 열기">
-            <i class="fas fa-plus"></i>
-        </button>
     </div>
 
 
@@ -225,9 +216,9 @@
             <i class="far fa-calendar-alt"></i>
             <span>캘린더</span>
         </a>
-        <a href="#" class="tab-item tab-item-disabled" data-action="noop" aria-disabled="true" title="검색 기능 준비 중">
-            <i class="fas fa-search"></i>
-            <span>검색 예정</span>
+        <a href="#" class="tab-item" data-action="switch-tab" data-page="schedule-task-page">
+            <i class="fas fa-list-check"></i>
+            <span>할 일 정리</span>
         </a>
         <a href="#" class="tab-item" data-action="switch-tab" data-page="profile-page">
             <i class="far fa-user"></i>
