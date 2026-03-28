@@ -124,6 +124,7 @@
 
             <div class="profile-hero-actions">
                 <button type="button" class="btn-secondary profile-action-button" data-action="edit-user-name">이름 수정</button>
+                <button type="button" class="btn-secondary profile-action-button" data-action="show-page" data-page="stats-page">통계 더 보기</button>
                 <button type="button" class="btn-primary profile-action-button" data-action="show-page" data-page="schedule-task-page">오늘 계획 보러가기</button>
             </div>
 
@@ -305,6 +306,105 @@
         </section>
     </div>
 
+    <div id="stats-page" class="page container hidden">
+        <header class="header">
+            <h1>통계</h1>
+            <button type="button" class="header-icon" data-action="show-page" data-page="profile-page" aria-label="내 정보로 돌아가기">
+                <i class="far fa-user"></i>
+            </button>
+        </header>
+
+        <section class="stats-hero-card">
+            <p class="profile-kicker">WEEKLY REVIEW</p>
+            <h2 id="stats-summary-title">이번 주 실행 흐름을 확인해보세요.</h2>
+            <p id="stats-summary-copy" class="stats-summary-copy">오늘 완료 수와 주간 흐름을 바탕으로 지금 리듬을 정리합니다.</p>
+            <div class="stats-chip-row">
+                <span id="stats-selected-range" class="profile-status-chip">이번 주 범위</span>
+                <span id="stats-active-days" class="profile-status-chip">활성 0일</span>
+            </div>
+            <div class="stats-hero-actions">
+                <button type="button" id="stats-primary-action" class="btn-primary profile-action-button" data-action="show-page" data-page="schedule-task-page">오늘 계획 열기</button>
+                <button type="button" id="stats-secondary-action" class="btn-secondary profile-action-button" data-action="show-page" data-page="timeline-page">지금 일정 보기</button>
+            </div>
+        </section>
+
+        <section class="profile-section profile-panel stats-focus-panel">
+            <div class="profile-panel-head">
+                <h2>지금 바로 할 일</h2>
+                <p id="stats-focus-copy">오늘 흐름에 맞춘 다음 액션을 보여줍니다.</p>
+            </div>
+            <div id="stats-focus-list" class="profile-list"></div>
+        </section>
+
+        <section class="profile-section">
+            <div class="profile-section-heading">
+                <h2>핵심 지표</h2>
+                <p>오늘과 이번 주의 실행 상태를 가장 중요한 숫자로 압축했습니다.</p>
+            </div>
+            <div class="stats-key-grid">
+                <article class="profile-stat-card accent">
+                    <span class="profile-stat-label">오늘 완료</span>
+                    <strong id="stats-today-completion" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">오늘 완료한 블록 수</span>
+                </article>
+                <article class="profile-stat-card">
+                    <span class="profile-stat-label">주간 완료율</span>
+                    <strong id="stats-week-completion-rate" class="profile-stat-value">0%</strong>
+                    <span class="profile-stat-note">이번 주 배치 대비 완료 비율</span>
+                </article>
+                <article class="profile-stat-card">
+                    <span class="profile-stat-label">연속 실행</span>
+                    <strong id="stats-current-streak" class="profile-stat-value">0일</strong>
+                    <span class="profile-stat-note">연속으로 완료를 남긴 일수</span>
+                </article>
+                <article class="profile-stat-card">
+                    <span class="profile-stat-label">버퍼 활용</span>
+                    <strong id="stats-buffer-usage" class="profile-stat-value">0회</strong>
+                    <span class="profile-stat-note">버퍼 블록에 배치된 횟수</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="profile-section stats-detail-grid">
+            <article class="profile-panel">
+                <div class="profile-panel-head">
+                    <h2>주간 리듬</h2>
+                    <p>요일별 완료 흐름을 보고 강한 날과 비는 날을 같이 확인하세요.</p>
+                </div>
+                <div id="stats-week-bars" class="profile-weekly-bar-list"></div>
+            </article>
+
+            <article class="profile-panel">
+                <div class="profile-panel-head">
+                    <h2>집중 포인트</h2>
+                    <p>카테고리와 블록 기준으로 어디에 에너지가 많이 쓰였는지 보여줍니다.</p>
+                </div>
+                <div class="stats-insight-list">
+                    <div class="stats-insight-item">
+                        <span class="profile-mini-title">가장 많이 끝낸 카테고리</span>
+                        <strong id="stats-top-category" class="stats-insight-value">아직 없음</strong>
+                    </div>
+                    <div class="stats-insight-item">
+                        <span class="profile-mini-title">가장 잘 끝나는 블록</span>
+                        <strong id="stats-best-block" class="stats-insight-value">아직 없음</strong>
+                    </div>
+                    <div class="stats-insight-item">
+                        <span class="profile-mini-title">추천 해석</span>
+                        <p id="stats-insight-copy" class="stats-insight-copy">데이터가 쌓이면 실행 패턴을 바탕으로 추천이 표시됩니다.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="profile-section profile-panel">
+            <div class="profile-panel-head">
+                <h2>카테고리 분포</h2>
+                <p>현재 전체 할 일이 어떤 종류에 몰려 있는지 비율로 확인할 수 있습니다.</p>
+            </div>
+            <div id="stats-category-breakdown" class="stats-category-list"></div>
+        </section>
+    </div>
+
     <div id="schedule-your-task-page" class="page container hidden">
         <header class="header">
             <h1>시간 배치</h1>
@@ -381,9 +481,9 @@
             <i class="fas fa-list-check"></i>
             <span>할 일 정리</span>
         </a>
-        <a href="#" class="tab-item" data-action="switch-tab" data-page="profile-page">
-            <i class="far fa-user"></i>
-            <span>내 정보</span>
+        <a href="#" class="tab-item" data-action="switch-tab" data-page="stats-page">
+            <i class="far fa-chart-bar"></i>
+            <span>통계</span>
         </a>
     </nav>
 

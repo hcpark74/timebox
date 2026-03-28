@@ -193,5 +193,5 @@ export async function initApp() {
     initSyncId();
     await loadData();
     initDragAndDrop();
-    showPage("timeline-page");
+    showPage("stats-page");
 }

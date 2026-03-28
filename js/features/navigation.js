@@ -20,7 +20,8 @@ function updateTabState(activeTab) {
 }
 
 function syncActiveTabByPage(pageId) {
-    const activeTab = document.querySelector(`.tab-item[data-page="${pageId}"]`);
+    const tabPageId = pageId === "profile-page" ? "stats-page" : pageId;
+    const activeTab = document.querySelector(`.tab-item[data-page="${tabPageId}"]`);
     updateTabState(activeTab);
 }
 

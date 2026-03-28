@@ -842,6 +842,111 @@ body {
     margin-bottom: 24px;
 }
 
+.stats-hero-card {
+    padding: 22px 20px;
+    margin-bottom: 24px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #fff6e8 0%, #fffdf7 55%, #eef8ff 100%);
+    border: 1px solid #eddcc4;
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-summary-copy {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+.stats-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.stats-hero-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.stats-focus-panel {
+    background: linear-gradient(180deg, #fffdf9 0%, #fff8ef 100%);
+}
+
+.stats-key-grid,
+.stats-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.stats-insight-list {
+    display: grid;
+    gap: 14px;
+}
+
+.stats-insight-item {
+    padding: 14px;
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(241, 220, 194, 0.95);
+}
+
+.stats-insight-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.stats-insight-copy {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.stats-category-list {
+    display: grid;
+    gap: 12px;
+}
+
+.stats-category-item {
+    display: grid;
+    gap: 8px;
+}
+
+.stats-category-copy {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.stats-category-copy strong {
+    font-weight: 700;
+}
+
+.stats-category-copy span {
+    color: var(--text-muted);
+}
+
+.stats-category-track {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: #f3e6d3;
+}
+
+.stats-category-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #ffb347 0%, #ff8c00 100%);
+}
+
 .profile-hero-card,
 .profile-progress-card,
 .profile-panel,
@@ -1284,6 +1389,7 @@ body {
 @media (max-width: 420px) {
     .profile-hero-main,
     .profile-hero-actions,
+    .stats-hero-actions,
     .profile-progress-head,
     .profile-list-item {
         flex-direction: column;
@@ -1291,7 +1397,9 @@ body {
     }
 
     .profile-stats-grid,
+    .stats-key-grid,
     .profile-detail-grid,
+    .stats-detail-grid,
     .profile-weekly-grid,
     .category-grid {
         grid-template-columns: 1fr;
