@@ -16,6 +16,8 @@
 
 <body>
 
+    <div id="app-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
     <div id="calendar-page" class="page container hidden">
         <header class="header">
             <h1>캘린더</h1>
@@ -38,9 +40,9 @@
             <!-- 자바스크립트로 채워짐 -->
         </div>
 
-        <div class="fab" onclick="showPage('schedule-task-page')">
+        <button type="button" class="fab" data-action="show-page" data-page="schedule-task-page" aria-label="할 일 정리 열기">
             <i class="fas fa-plus"></i>
-        </div>
+        </button>
     </div>
 
     <div id="schedule-task-page" class="page container hidden">
@@ -53,27 +55,30 @@
             <p id="priority-limit-hint" class="priority-limit-hint">
                 오늘의 핵심은 최대 4개까지 선택할 수 있습니다.
             </p>
+            <p class="priority-reorder-hint">위아래 버튼이나 드래그로 순서를 조정할 수 있습니다.</p>
             <div class="task-list" id="priority-list">
                 <!-- 자바스크립트로 채워짐 -->
             </div>
         </div>
 
-        <div class="task-section" style="margin-top: 24px;">
-            <h2>할 일 목록</h2>
-            <div class="task-list" id="backlog-list">
+        <div class="task-section task-section-spaced backlog-section">
+            <button type="button" class="section-toggle" data-action="toggle-backlog" aria-expanded="false" aria-controls="backlog-list">
+                <span class="section-toggle-title">할 일 목록</span>
+                <span id="backlog-toggle-count" class="section-toggle-count">0개</span>
+                <i class="fas fa-chevron-down section-toggle-icon" aria-hidden="true"></i>
+            </button>
+            <div class="task-list hidden" id="backlog-list" role="region" aria-label="할 일 목록" aria-labelledby="backlog-toggle-count">
                 <!-- 자바스크립트로 채워짐 -->
             </div>
         </div>
 
         <!-- 빠른 할 일 추가 -->
-        <div class="task-input-container" style="margin-top: 20px;">
-            <input type="text" id="new-task-input" placeholder="할 일을 입력하세요"
-                style="padding: 12px; width: 70%; border: 1px solid #ddd; border-radius: 8px;">
-            <button onclick="addNewTask()"
-                style="padding: 12px; width: 25%; background: var(--primary-color); color: white; border: none; border-radius: 8px;">할 일 추가</button>
+        <div class="task-input-container task-input-row">
+            <input type="text" id="new-task-input" class="task-input" placeholder="할 일을 입력하세요">
+            <button type="button" class="task-input-submit" data-action="add-task">할 일 추가</button>
         </div>
 
-        <button id="open-scheduler-btn" class="btn-primary" onclick="showPage('schedule-your-task-page')">시간 배치하기</button>
+        <button id="open-scheduler-btn" class="btn-primary" type="button" data-action="show-page" data-page="schedule-your-task-page">시간 배치하기</button>
         <div class="planner-checklist" aria-label="계획 체크리스트">
             <strong class="planner-checklist-title">오늘 계획</strong>
             <span id="checklist-priority-count">1. 오늘의 핵심 고르기</span>
@@ -95,14 +100,16 @@
             <div class="profile-info">
                 <h2>안녕하세요, Jayraj</h2>
                 <p>오늘도 좋은 하루 보내세요.</p>
-                <div style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">
-                    동기화 ID: <span id="sync-id-display"
-                        style="font-family: monospace; font-weight: bold; cursor: pointer;"
-                        onclick="copySyncId()">불러오는 중...</span>
-                    <i class="fas fa-edit" onclick="editSyncId()" style="margin-left: 8px; cursor: pointer;"></i>
+                <div class="sync-id-row">
+                    <span>동기화 ID:</span>
+                    <button type="button" id="sync-id-display" class="icon-button sync-id-button"
+                        data-action="copy-sync-id" aria-label="동기화 ID 복사">불러오는 중...</button>
+                    <button type="button" class="icon-button sync-id-edit-button" data-action="edit-sync-id" aria-label="동기화 ID 수정">
+                        <i class="fas fa-edit"></i>
+                    </button>
                 </div>
             </div>
-            <i class="fas fa-chevron-right" style="margin-left: auto; color: var(--primary-color);"></i>
+            <i class="fas fa-chevron-right profile-card-arrow"></i>
         </div>
 
         <div class="task-section">
@@ -138,9 +145,9 @@
                 </div>
             </div>
         </div>
-        <div class="fab" onclick="showPage('schedule-task-page')">
+        <button type="button" class="fab" data-action="show-page" data-page="schedule-task-page" aria-label="할 일 정리 열기">
             <i class="fas fa-plus"></i>
-        </div>
+        </button>
     </div>
 
     <div id="schedule-your-task-page" class="page container hidden">
@@ -164,9 +171,9 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn-secondary" onclick="resetSchedule()">다시 배치</button>
-            <button class="btn-primary" style="margin-top: 0; flex: 1;"
-                onclick="showPage('timeline-page')">오늘 일정 보기</button>
+            <button class="btn-secondary" type="button" data-action="reset-schedule">다시 배치</button>
+            <button class="btn-primary btn-primary-inline"
+                type="button" data-action="show-page" data-page="timeline-page">오늘 일정 보기</button>
         </div>
     </div>
 
@@ -174,9 +181,9 @@
     <div id="timeline-page" class="page container">
         <header class="header">
             <h1>오늘 일정</h1>
-            <div class="header-icon btn-header-orange" onclick="showPage('calendar-page')">
+            <button type="button" class="header-icon btn-header-orange" data-action="show-page" data-page="calendar-page" aria-label="캘린더 열기">
                 <i class="far fa-calendar-alt"></i>
-            </div>
+            </button>
         </header>
 
         <h3 id="timeline-date-header">10월 9일 수요일</h3>
@@ -184,32 +191,32 @@
         <div class="timeline-container" id="timeline-view">
             <!-- 자바스크립트로 채워짐 -->
         </div>
-        <div class="fab" onclick="showPage('schedule-task-page')">
+        <button type="button" class="fab" data-action="show-page" data-page="schedule-task-page" aria-label="할 일 정리 열기">
             <i class="fas fa-plus"></i>
-        </div>
+        </button>
     </div>
 
 
     <nav class="bottom-tab-bar">
-        <a href="#" class="tab-item active-calendar" onclick="showPage('timeline-page'); setActiveTab(this)">
+        <a href="#" class="tab-item active-calendar" data-action="switch-tab" data-page="timeline-page" aria-current="page">
             <i class="fas fa-clock"></i>
             <span>오늘 일정</span>
         </a>
-        <a href="#" class="tab-item" onclick="showPage('calendar-page'); setActiveTab(this)">
+        <a href="#" class="tab-item" data-action="switch-tab" data-page="calendar-page">
             <i class="far fa-calendar-alt"></i>
             <span>캘린더</span>
         </a>
-        <a href="#" class="tab-item tab-item-disabled" onclick="return false;" aria-disabled="true" title="검색 기능 준비 중">
+        <a href="#" class="tab-item tab-item-disabled" data-action="noop" aria-disabled="true" title="검색 기능 준비 중">
             <i class="fas fa-search"></i>
             <span>검색 예정</span>
         </a>
-        <a href="#" class="tab-item" onclick="showPage('profile-page'); setActiveTab(this)">
+        <a href="#" class="tab-item" data-action="switch-tab" data-page="profile-page">
             <i class="far fa-user"></i>
             <span>내 정보</span>
         </a>
     </nav>
 
-    <script src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
