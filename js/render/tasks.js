@@ -7,7 +7,7 @@ let isBacklogExpanded = false;
 export function toggleBacklogSection() {
     isBacklogExpanded = !isBacklogExpanded;
     renderTaskLists();
-    announceStatus(isBacklogExpanded ? "할 일 목록을 펼쳤습니다." : "할 일 목록을 접었습니다.");
+    announceStatus(isBacklogExpanded ? "할 일 목록을 펼쳤습니다." : "할 일 목록을 접었습니다.", "info");
 }
 
 export function renderTaskLists() {
@@ -189,7 +189,7 @@ export function renderTaskLists() {
 }
 
 export function renderCategoryCounts() {
-    const counts = { personal: 0, meet: 0, event: 0, work: 0 };
+    const counts = { personal: 0, meet: 0, event: 0, work: 0, rest: 0, other: 0 };
 
     state.tasks.forEach((task) => {
         if (counts[task.category] !== undefined) {
@@ -201,9 +201,13 @@ export function renderCategoryCounts() {
     const meet = document.getElementById("cat-meet-count");
     const event = document.getElementById("cat-event-count");
     const work = document.getElementById("cat-work-count");
+    const rest = document.getElementById("cat-rest-count");
+    const other = document.getElementById("cat-other-count");
 
     if (personal) personal.innerText = `${counts.personal}개`;
     if (meet) meet.innerText = `${counts.meet}개`;
     if (event) event.innerText = `${counts.event}개`;
     if (work) work.innerText = `${counts.work}개`;
+    if (rest) rest.innerText = `${counts.rest}개`;
+    if (other) other.innerText = `${counts.other}개`;
 }

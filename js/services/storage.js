@@ -9,12 +9,17 @@ export function loadLocalTasks() {
 
     const parsed = JSON.parse(localData);
     state.tasks = parsed.tasks || [];
+    state.user = {
+        ...state.user,
+        ...(parsed.user || {})
+    };
     return true;
 }
 
 export function saveLocalTasks() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        tasks: state.tasks
+        tasks: state.tasks,
+        user: state.user
     }));
 }
 

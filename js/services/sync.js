@@ -97,10 +97,10 @@ export async function editSyncId() {
     saveStoredSyncId(nextSyncId);
     updateSyncUI();
     await loadData();
-    announceStatus("동기화 ID를 변경했습니다.");
+    announceStatus("동기화 ID를 변경했습니다.", "info");
 }
 
 export function copySyncId() {
     navigator.clipboard.writeText(state.syncId);
-    announceStatus("동기화 ID를 복사했습니다.");
+    announceStatus("동기화 ID를 복사했습니다.", "info");
 }

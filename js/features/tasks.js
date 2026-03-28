@@ -51,7 +51,7 @@ function canMoveTaskToPriority(targetPriority) {
     if (priorityCount >= MAX_PRIORITY_TASKS) {
         alert(`오늘의 핵심은 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`);
         refreshUI();
-        announceStatus(`오늘의 핵심은 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`);
+        announceStatus(`오늘의 핵심은 최대 ${MAX_PRIORITY_TASKS}개까지 선택할 수 있습니다.`, "warning");
         return false;
     }
 
@@ -101,7 +101,7 @@ export async function addNewTask() {
 
     input.value = "";
     await saveData();
-    announceStatus(`할 일 '${title}'을 추가했습니다.`);
+    announceStatus(`할 일 '${title}'을 추가했습니다.`, "success");
 }
 
 export async function deleteTask(id, event) {
@@ -116,7 +116,7 @@ export async function deleteTask(id, event) {
     const task = state.tasks.find((item) => item.id === id);
     state.tasks = state.tasks.filter((item) => item.id !== id);
     await saveData();
-    announceStatus(`할 일 '${task?.title || "항목"}'을 삭제했습니다.`);
+    announceStatus(`할 일 '${task?.title || "항목"}'을 삭제했습니다.`, "danger");
 }
 
 export async function onReorder(evt) {
@@ -139,7 +139,7 @@ export async function onReorder(evt) {
     await saveData();
     announceStatus(task.priority === "high"
         ? `할 일 '${task.title}'을 오늘의 핵심으로 옮겼습니다.`
-        : `할 일 '${task.title}'을 할 일 목록으로 옮겼습니다.`);
+        : `할 일 '${task.title}'을 할 일 목록으로 옮겼습니다.`, "success");
 }
 
 export async function moveTaskWithinList(taskId, direction) {
@@ -160,7 +160,7 @@ export async function moveTaskWithinList(taskId, direction) {
     state.tasks[currentIndex] = otherTask;
     state.tasks[adjacentIndex] = task;
     await saveData();
-    announceStatus(`할 일 '${task.title}'을 ${direction === "up" ? "위" : "아래"}로 이동했습니다.`);
+    announceStatus(`할 일 '${task.title}'을 ${direction === "up" ? "위" : "아래"}로 이동했습니다.`, "success");
 }
 
 export async function moveTaskToBucket(taskId, targetPriority) {
@@ -181,5 +181,5 @@ export async function moveTaskToBucket(taskId, targetPriority) {
     await saveData();
     announceStatus(targetPriority === "high"
         ? `할 일 '${task.title}'을 오늘의 핵심으로 옮겼습니다.`
-        : `할 일 '${task.title}'을 할 일 목록으로 옮겼습니다.`);
+        : `할 일 '${task.title}'을 할 일 목록으로 옮겼습니다.`, "success");
 }

@@ -15,7 +15,7 @@ export async function toggleTaskStatus(id) {
     await saveData();
     announceStatus(task.status === "completed"
         ? `할 일 '${task.title}'을 완료로 표시했습니다.`
-        : `할 일 '${task.title}'의 완료를 해제했습니다.`);
+        : `할 일 '${task.title}'의 완료를 해제했습니다.`, task.status === "completed" ? "success" : "warning");
 }
 
 export async function unscheduleTask(id) {
@@ -28,7 +28,7 @@ export async function unscheduleTask(id) {
     task.scheduledTime = null;
     task.scheduledDate = null;
     await saveData();
-    announceStatus(`할 일 '${task.title}' 배치를 해제했습니다.`);
+    announceStatus(`할 일 '${task.title}' 배치를 해제했습니다.`, "danger");
 }
 
 export async function scheduleTaskToBlock(taskId, time) {
@@ -56,7 +56,7 @@ export async function scheduleTaskToBlock(taskId, time) {
     await saveData();
     announceStatus(replacedTaskTitle
         ? `할 일 '${task.title}'을 ${time} 블록에 배치하고 '${replacedTaskTitle}'을 해제했습니다.`
-        : `할 일 '${task.title}'을 ${time} 블록에 배치했습니다.`);
+        : `할 일 '${task.title}'을 ${time} 블록에 배치했습니다.`, replacedTaskTitle ? "warning" : "success");
 }
 
 export async function clearBlockByTime(time) {
@@ -74,7 +74,7 @@ export async function clearBlockByTime(time) {
     task.scheduledTime = null;
     task.scheduledDate = null;
     await saveData();
-    announceStatus(`할 일 '${task.title}'을 ${time} 블록에서 해제했습니다.`);
+    announceStatus(`할 일 '${task.title}'을 ${time} 블록에서 해제했습니다.`, "danger");
 }
 
 export async function carryOverTask(id, targetPriority) {
@@ -91,7 +91,7 @@ export async function carryOverTask(id, targetPriority) {
     await saveData();
     announceStatus(targetPriority === "high"
         ? `할 일 '${task.title}'을 내일 핵심 후보로 남겼습니다.`
-        : `할 일 '${task.title}'을 할 일 목록으로 되돌렸습니다.`);
+        : `할 일 '${task.title}'을 할 일 목록으로 되돌렸습니다.`, "success");
 }
 
 export function finishDayReview() {
@@ -107,7 +107,7 @@ export function finishDayReview() {
 
     announceStatus(pendingCount > 0
         ? `오늘 완료 ${completedCount}개를 확인하고 다음 날 계획으로 넘어갑니다. 남은 일은 다시 계획할 수 있어요.`
-        : `오늘 완료 ${completedCount}개로 하루를 마무리하고 다음 날 계획으로 넘어갑니다.`);
+        : `오늘 완료 ${completedCount}개로 하루를 마무리하고 다음 날 계획으로 넘어갑니다.`, "success");
 }
 
 export async function resetSchedule() {
@@ -125,7 +125,7 @@ export async function resetSchedule() {
     await saveData();
 
     if (resetCount > 0) {
-        announceStatus(`선택한 날짜의 일정 ${resetCount}개를 초기화했습니다.`);
+        announceStatus(`선택한 날짜의 일정 ${resetCount}개를 초기화했습니다.`, "danger");
     }
 }
 

@@ -17,6 +17,13 @@
 <body>
 
     <div id="app-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    <div id="app-toast" class="app-toast hidden" aria-hidden="true">
+        <span id="app-toast-icon" class="app-toast-icon" aria-hidden="true">i</span>
+        <span id="app-toast-text" class="app-toast-text"></span>
+        <button type="button" class="app-toast-close" data-action="dismiss-toast" aria-label="안내 닫기">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
 
     <div id="calendar-page" class="page container hidden">
         <header class="header">
@@ -103,25 +110,166 @@
             </div>
         </header>
 
-        <div class="profile-card">
-            <img src="assets/profile.svg" alt="프로필" class="profile-img">
-            <div class="profile-info">
-                <h2>안녕하세요, Jayraj</h2>
-                <p>오늘도 좋은 하루 보내세요.</p>
-                <div class="sync-id-row">
-                    <span>동기화 ID:</span>
-                    <button type="button" id="sync-id-display" class="icon-button sync-id-button"
-                        data-action="copy-sync-id" aria-label="동기화 ID 복사">불러오는 중...</button>
-                    <button type="button" class="icon-button sync-id-edit-button" data-action="edit-sync-id" aria-label="동기화 ID 수정">
-                        <i class="fas fa-edit"></i>
-                    </button>
+        <section class="profile-hero-card">
+            <div class="profile-hero-main">
+                <div class="profile-avatar-wrap">
+                    <img src="assets/profile.svg" alt="프로필" class="profile-img">
+                </div>
+                <div class="profile-info">
+                    <p class="profile-kicker">MY FLOW</p>
+                    <h2 id="profile-name-heading">안녕하세요, Jayraj</h2>
+                    <p id="profile-greeting-text">오늘도 좋은 하루 보내세요.</p>
                 </div>
             </div>
-            <i class="fas fa-chevron-right profile-card-arrow"></i>
-        </div>
 
-        <div class="task-section">
-            <h2>카테고리</h2>
+            <div class="profile-hero-actions">
+                <button type="button" class="btn-secondary profile-action-button" data-action="edit-user-name">이름 수정</button>
+                <button type="button" class="btn-primary profile-action-button" data-action="show-page" data-page="schedule-task-page">오늘 계획 보러가기</button>
+            </div>
+
+            <div class="profile-status-row">
+                <div class="profile-status-chip">
+                    <i class="fas fa-calendar-day" aria-hidden="true"></i>
+                    <span id="profile-selected-date">오늘 일정 기준</span>
+                </div>
+                <div class="profile-status-chip">
+                    <i class="fas fa-cloud" aria-hidden="true"></i>
+                    <span id="profile-sync-status">동기화 준비됨</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <div class="profile-section-heading">
+                <h2>오늘 요약</h2>
+                <p>지금 하루 흐름이 어디까지 왔는지 빠르게 확인하세요.</p>
+            </div>
+
+            <div class="profile-stats-grid">
+                <article class="profile-stat-card">
+                    <span class="profile-stat-label">전체 할 일</span>
+                    <strong id="profile-total-count" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">보관 중인 전체 작업</span>
+                </article>
+                <article class="profile-stat-card">
+                    <span class="profile-stat-label">오늘의 핵심</span>
+                    <strong id="profile-priority-count" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">집중 대상으로 고른 일</span>
+                </article>
+                <article class="profile-stat-card">
+                    <span class="profile-stat-label">오늘 배치</span>
+                    <strong id="profile-scheduled-count" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">시간 블록에 배정됨</span>
+                </article>
+                <article class="profile-stat-card accent">
+                    <span class="profile-stat-label">오늘 완료</span>
+                    <strong id="profile-completed-count" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">완료 체크한 일정</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="profile-section profile-progress-card">
+            <div class="profile-progress-head">
+                <div>
+                    <h2>실행 진도</h2>
+                    <p id="profile-progress-copy">오늘 배치된 일정이 아직 없습니다.</p>
+                </div>
+                <strong id="profile-progress-percent" class="profile-progress-percent">0%</strong>
+            </div>
+            <div class="profile-progress-track" aria-hidden="true">
+                <div id="profile-progress-fill" class="profile-progress-fill"></div>
+            </div>
+            <div class="profile-progress-meta">
+                <span id="profile-progress-meta-left">오늘 완료율 0%</span>
+                <span id="profile-progress-meta-right">완료 0 / 배치 0</span>
+            </div>
+        </section>
+
+        <section class="profile-section profile-weekly-card">
+            <div class="profile-section-heading">
+                <h2>이번 주 통계</h2>
+                <p id="profile-week-range">3월 25일 - 3월 31일 기준</p>
+            </div>
+
+            <div class="profile-weekly-grid">
+                <article class="profile-weekly-stat">
+                    <span class="profile-stat-label">주간 완료</span>
+                    <strong id="profile-week-completed" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">이번 주 완료한 일정</span>
+                </article>
+                <article class="profile-weekly-stat">
+                    <span class="profile-stat-label">주간 배치</span>
+                    <strong id="profile-week-scheduled" class="profile-stat-value">0</strong>
+                    <span class="profile-stat-note">이번 주 시간 블록에 배정</span>
+                </article>
+                <article class="profile-weekly-stat">
+                    <span class="profile-stat-label">완료율</span>
+                    <strong id="profile-week-rate" class="profile-stat-value">0%</strong>
+                    <span class="profile-stat-note">배치 대비 완료 비율</span>
+                </article>
+            </div>
+
+            <div class="profile-week-insight">
+                <div class="profile-week-insight-row">
+                    <span class="profile-week-insight-label">강한 요일</span>
+                    <span id="profile-week-insight-best" class="profile-week-insight-value">이번 주 완료 패턴이 여기에 표시됩니다.</span>
+                </div>
+                <div class="profile-week-insight-row">
+                    <span class="profile-week-insight-label">아쉬운 요일</span>
+                    <span id="profile-week-insight-weak" class="profile-week-insight-value">아직 데이터가 충분하지 않습니다.</span>
+                </div>
+                <div class="profile-week-insight-row">
+                    <span class="profile-week-insight-label">추천 액션</span>
+                    <div class="profile-week-insight-action-group">
+                        <span id="profile-week-insight-action" class="profile-week-insight-value">핵심 작업을 먼저 시간 블록에 배치해보세요.</span>
+                        <button type="button" id="profile-week-insight-cta" class="btn-primary profile-week-insight-button" data-action="show-page" data-page="schedule-your-task-page">시간 배치하러 가기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-weekly-bar-list" id="profile-weekly-bars"></div>
+        </section>
+
+        <section class="profile-section profile-detail-grid">
+            <article class="profile-panel">
+                <div class="profile-panel-head">
+                    <h2>동기화</h2>
+                    <p>같은 ID를 쓰면 여러 기기에서 이어서 확인할 수 있습니다.</p>
+                </div>
+                <div class="sync-id-card">
+                    <span class="sync-id-label">동기화 ID</span>
+                    <div class="sync-id-row">
+                        <button type="button" id="sync-id-display" class="icon-button sync-id-button"
+                            data-action="copy-sync-id" aria-label="동기화 ID 복사">불러오는 중...</button>
+                        <button type="button" class="icon-button sync-id-edit-button" data-action="edit-sync-id" aria-label="동기화 ID 수정">
+                            <i class="fas fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                    <p class="sync-id-help">복사해서 다른 브라우저나 기기에서 같은 값을 입력하면 됩니다.</p>
+                </div>
+            </article>
+
+            <article class="profile-panel">
+                <div class="profile-panel-head">
+                    <h2>오늘 포커스</h2>
+                    <p>배치된 일정과 아직 남은 핵심 작업을 함께 보여줍니다.</p>
+                </div>
+                <div class="profile-mini-section">
+                    <strong class="profile-mini-title">시간 블록에 배치됨</strong>
+                    <div id="profile-scheduled-list" class="profile-list"></div>
+                </div>
+                <div class="profile-mini-section">
+                    <strong class="profile-mini-title">아직 배치 전</strong>
+                    <div id="profile-unassigned-list" class="profile-list"></div>
+                </div>
+            </article>
+        </section>
+
+        <section class="task-section profile-section">
+            <div class="profile-section-heading">
+                <h2>카테고리</h2>
+                <p>어떤 종류의 일이 많이 쌓여 있는지 확인해보세요.</p>
+            </div>
             <div class="category-grid">
                 <div class="category-card">
                     <div class="category-icon"><i class="far fa-calendar-check"></i></div>
@@ -146,13 +294,15 @@
                 <div class="category-card">
                     <div class="category-icon"><i class="far fa-smile"></i></div>
                     <h3>휴식</h3>
+                    <p id="cat-rest-count">0개</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon"><i class="fas fa-mug-hot"></i></div>
                     <h3>기타</h3>
+                    <p id="cat-other-count">0개</p>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div id="schedule-your-task-page" class="page container hidden">

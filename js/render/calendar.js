@@ -81,7 +81,7 @@ export function selectCalendarDate(dateString, shouldAnnounce = true) {
     triggerPlannerWeekTransition();
 
     if (shouldAnnounce) {
-        announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 일정을 확인합니다.`);
+        announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 일정을 확인합니다.`, "info");
     }
 }
 
@@ -94,7 +94,7 @@ export function shiftSelectedWeek(direction) {
     state.currentDate = new Date(nextDate);
     refreshUI();
     triggerPlannerWeekTransition();
-    announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 주차를 확인합니다.`);
+    announceStatus(`${state.selectedDate.toLocaleDateString("ko-KR", { month: "long", day: "numeric", weekday: "long" })} 주차를 확인합니다.`, "info");
 }
 
 export function renderCalendar() {
