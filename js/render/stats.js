@@ -186,6 +186,7 @@ export function renderStats() {
     const focusList = document.getElementById("stats-focus-list");
     const primaryAction = document.getElementById("stats-primary-action");
     const secondaryAction = document.getElementById("stats-secondary-action");
+    const emptyVisual = document.getElementById("stats-empty-visual");
     const focusData = createFocusList(selectedDateString);
     const hasAnyTask = state.tasks.length > 0;
 
@@ -269,5 +270,9 @@ export function renderStats() {
     if (secondaryAction) {
         secondaryAction.textContent = hasAnyTask ? "지금 일정 보기" : "내 정보 보기";
         secondaryAction.dataset.page = hasAnyTask ? "timeline-page" : "profile-page";
+    }
+
+    if (emptyVisual) {
+        emptyVisual.classList.toggle("hidden", hasAnyTask);
     }
 }
