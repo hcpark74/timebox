@@ -430,6 +430,75 @@ body {
     font-size: 12px;
 }
 
+.carryover-section {
+    border: 1px solid #f1dcc2;
+    border-radius: var(--border-radius-lg);
+    padding: 16px;
+    background: linear-gradient(180deg, #fffdf9 0%, #fff7ec 100%);
+    box-shadow: var(--shadow-sm);
+}
+
+.carryover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.carryover-header h2 {
+    margin-bottom: 0;
+}
+
+.carryover-hint {
+    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.carryover-item {
+    align-items: flex-start;
+}
+
+.carryover-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.carryover-meta {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.carryover-promote-button {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background-color: var(--primary-color);
+    color: var(--bg-white);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.carryover-plan-button {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background-color: #fff4e5;
+    color: #b86a00;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
 .task-section.priority-full h2 {
     color: var(--primary-color);
 }
@@ -870,6 +939,148 @@ body {
 
 .task-block-meta i {
     color: var(--text-muted);
+}
+
+.day-end-card {
+    background: linear-gradient(180deg, #fffdf9 0%, #fff7ec 100%);
+    border: 1px solid #f1dcc2;
+    border-radius: var(--border-radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.day-end-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.day-end-kicker {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b86a00;
+}
+
+.day-end-header h3 {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.day-end-subcopy {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.day-end-finish-button {
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+.day-end-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.day-end-section {
+    background-color: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(241, 220, 194, 0.9);
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.day-end-section h4 {
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.day-end-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.day-end-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background-color: var(--bg-white);
+    border: 1px solid #f1e6d3;
+}
+
+.day-end-item.is-completed {
+    border-color: #cfe8d6;
+    background-color: #f5fbf7;
+}
+
+.day-end-badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background-color: #e6f4ea;
+    color: #1f7a48;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.day-end-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.day-end-action-button {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background-color: var(--primary-color);
+    color: var(--bg-white);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.day-end-action-button.secondary {
+    background-color: #eef2f6;
+    color: var(--text-dark);
+}
+
+.day-end-empty {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .day-end-header,
+    .day-end-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .day-end-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .day-end-actions {
+        justify-content: stretch;
+    }
+
+    .day-end-action-button,
+    .day-end-finish-button {
+        width: 100%;
+    }
 }
 
 .task-remove-btn {

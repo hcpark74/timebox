@@ -11,6 +11,9 @@ export function renderTimeline() {
     timelineElement.innerHTML = "";
 
     const selectedDate = getDateString(state.selectedDate);
+    const scheduledTasks = state.tasks.filter((item) => item.scheduledDate === selectedDate && item.scheduledTime);
+    const completedTasks = scheduledTasks.filter((item) => item.status === "completed");
+    const pendingTasks = scheduledTasks.filter((item) => item.status !== "completed");
 
     SCHEDULING_BLOCKS.forEach((block) => {
         const task = state.tasks.find((item) => item.scheduledDate === selectedDate && item.scheduledTime === block.start);
@@ -39,6 +42,52 @@ export function renderTimeline() {
         `;
         timelineElement.appendChild(blockElement);
     });
+
+    const dayEndElement = document.createElement("section");
+    dayEndElement.className = "day-end-card";
+    dayEndElement.innerHTML = `
+        <div class="day-end-header">
+            <div>
+                <span class="day-end-kicker">하루 마무리</span>
+                <h3>오늘 ${completedTasks.length}개를 마쳤고 ${pendingTasks.length}개가 남아 있어요</h3>
+                <p class="day-end-subcopy">정리를 마치면 바로 다음 날 계획 화면으로 이어집니다.</p>
+            </div>
+            <button type="button" class="btn-primary day-end-finish-button" data-action="finish-day-review">내일 계획으로 이어가기</button>
+        </div>
+        <div class="day-end-grid">
+            <div class="day-end-section">
+                <h4>오늘 완료한 일</h4>
+                ${completedTasks.length ? `
+                    <div class="day-end-list">
+                        ${completedTasks.map((task) => `
+                            <div class="day-end-item is-completed">
+                                <span>${task.title}</span>
+                                <span class="day-end-badge">완료</span>
+                            </div>
+                        `).join("")}
+                    </div>
+                ` : '<p class="day-end-empty">아직 완료한 일정이 없습니다.</p>'}
+            </div>
+            <div class="day-end-section">
+                <h4>남은 일 정리</h4>
+                ${pendingTasks.length ? `
+                    <div class="day-end-list">
+                        ${pendingTasks.map((task) => `
+                            <div class="day-end-item">
+                                <span>${task.title}</span>
+                                <div class="day-end-actions">
+                                    <button type="button" class="day-end-action-button" data-action="carry-over-task" data-task-id="${task.id}" data-target-priority="high">내일 핵심으로</button>
+                                    <button type="button" class="day-end-action-button secondary" data-action="carry-over-task" data-task-id="${task.id}" data-target-priority="medium">할 일 목록으로</button>
+                                </div>
+                            </div>
+                        `).join("")}
+                    </div>
+                ` : '<p class="day-end-empty">남은 일정이 없습니다. 오늘 계획을 잘 마쳤어요.</p>'}
+            </div>
+        </div>
+    `;
+
+    timelineElement.appendChild(dayEndElement);
 }
 
 export function renderTimelineSlots() {

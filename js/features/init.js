@@ -5,7 +5,7 @@ import { updateUI } from "../render/index.js";
 import { toggleBacklogSection } from "../render/tasks.js";
 import { copySyncId, editSyncId, initSyncId, loadData } from "../services/sync.js";
 import { addNewTask, deleteTask, moveTaskToBucket, moveTaskWithinList } from "./tasks.js";
-import { clearBlockByTime, initDragAndDrop, resetSchedule, scheduleTaskToBlock, toggleTaskStatus, unscheduleTask } from "./schedule.js";
+import { carryOverTask, clearBlockByTime, finishDayReview, initDragAndDrop, resetSchedule, scheduleTaskToBlock, toggleTaskStatus, unscheduleTask } from "./schedule.js";
 import { setActiveTab, showPage } from "./navigation.js";
 
 function bindStaticEvents() {
@@ -22,6 +22,19 @@ function bindStaticEvents() {
             case "show-page":
                 showPage(page);
                 break;
+            case "open-schedule-from-carryover": {
+                showPage("schedule-your-task-page");
+                window.setTimeout(() => {
+                    const firstOpenBlock = document.querySelector(".planner-slot:not(.buffer-slot) .planner-slot-current:not(.is-filled)")
+                        || document.querySelector(".planner-slot .planner-slot-controls");
+
+                    firstOpenBlock?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                    const selectElement = firstOpenBlock?.closest(".planner-slot")?.querySelector(".schedule-select");
+                    selectElement?.focus();
+                }, 60);
+                announceStatus("시간 배치 화면으로 이동해 먼저 비어 있는 블록을 보여줍니다.");
+                break;
+            }
             case "switch-tab":
                 event.preventDefault();
                 showPage(page);
@@ -55,6 +68,13 @@ function bindStaticEvents() {
             }
             case "clear-block":
                 await clearBlockByTime(actionTarget.dataset.time);
+                break;
+            case "carry-over-task":
+                await carryOverTask(taskId, actionTarget.dataset.targetPriority);
+                break;
+            case "finish-day-review":
+                finishDayReview();
+                showPage("schedule-task-page");
                 break;
             case "toggle-backlog":
                 toggleBacklogSection();

@@ -58,6 +58,17 @@
             </div>
         </div>
 
+        <div class="task-section task-section-spaced carryover-section hidden" id="carryover-section">
+            <div class="carryover-header">
+                <h2>어제 남은 일</h2>
+                <button type="button" class="carryover-plan-button" data-action="open-schedule-from-carryover">바로 시간 배치</button>
+            </div>
+            <p class="carryover-hint">하루 마무리에서 넘긴 일을 먼저 다시 계획해보세요.</p>
+            <div class="task-list" id="carryover-list">
+                <!-- 자바스크립트로 채워짐 -->
+            </div>
+        </div>
+
         <div class="task-section task-section-spaced backlog-section">
             <button type="button" class="section-toggle" data-action="toggle-backlog" aria-expanded="false" aria-controls="backlog-list">
                 <span class="section-toggle-title">할 일 목록</span>

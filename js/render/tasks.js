@@ -18,6 +18,8 @@ export function renderTaskLists() {
     const checklistScheduleCount = document.getElementById("checklist-schedule-count");
     const checklistExecute = document.getElementById("checklist-execute");
     const priorityElement = document.getElementById("priority-list");
+    const carryoverSection = document.getElementById("carryover-section");
+    const carryoverElement = document.getElementById("carryover-list");
     const backlogElement = document.getElementById("backlog-list");
     const backlogToggle = document.querySelector('[data-action="toggle-backlog"]');
     const backlogToggleCount = document.getElementById("backlog-toggle-count");
@@ -25,14 +27,20 @@ export function renderTaskLists() {
     const scheduleStatusAssigned = document.getElementById("schedule-status-assigned");
     const scheduleStatusUnassigned = document.getElementById("schedule-status-unassigned");
 
-    if (!priorityElement || !backlogElement) {
+    if (!priorityElement || !carryoverElement || !backlogElement) {
         return;
     }
 
     priorityElement.innerHTML = "";
+    carryoverElement.innerHTML = "";
     backlogElement.innerHTML = "";
     const priorityTasks = state.tasks.filter((task) => task.priority === "high");
     const backlogTasks = state.tasks.filter((task) => task.priority !== "high");
+    const selectedDate = getDateString(state.selectedDate);
+    const previousDate = new Date(state.selectedDate);
+    previousDate.setDate(previousDate.getDate() - 1);
+    const previousDateString = getDateString(previousDate);
+    const carryOverTasks = state.tasks.filter((task) => task.carryOverDate === previousDateString && !task.scheduledDate && !task.scheduledTime);
 
     state.tasks.forEach((task) => {
         const isPriorityTask = task.priority === "high";
@@ -77,9 +85,22 @@ export function renderTaskLists() {
         }
     });
 
+    carryOverTasks.forEach((task) => {
+        const itemElement = document.createElement("div");
+        itemElement.className = "task-item carryover-item";
+        itemElement.innerHTML = `
+            <div class="task-icon"><i class="fas fa-rotate-right"></i></div>
+            <div class="carryover-copy">
+                <span class="task-name">${task.title}</span>
+                <span class="carryover-meta">${task.priority === "high" ? "내일 핵심 후보" : "할 일 목록으로 넘어옴"}</span>
+            </div>
+            <button type="button" class="carryover-promote-button" data-action="move-task-bucket" data-task-id="${task.id}" data-target-priority="high">오늘의 핵심으로</button>
+        `;
+        carryoverElement.appendChild(itemElement);
+    });
+
     const priorityCount = state.tasks.filter((task) => task.priority === "high").length;
     const backlogCount = backlogTasks.length;
-    const selectedDate = getDateString(state.selectedDate);
     const scheduledPriorityCount = state.tasks.filter((task) => task.priority === "high" && task.scheduledDate === selectedDate && task.scheduledTime).length;
     const completedScheduledPriorityCount = state.tasks.filter((task) => task.priority === "high" && task.scheduledDate === selectedDate && task.scheduledTime && task.status === "completed").length;
     const unassignedPriorityCount = priorityTasks.filter((task) => !(task.scheduledDate === selectedDate && task.scheduledTime)).length;
@@ -87,6 +108,10 @@ export function renderTaskLists() {
 
     if (prioritySectionElement) {
         prioritySectionElement.classList.toggle("priority-full", isPriorityFull);
+    }
+
+    if (carryoverSection) {
+        carryoverSection.classList.toggle("hidden", carryOverTasks.length === 0);
     }
 
     if (backlogToggle) {
