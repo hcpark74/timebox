@@ -174,7 +174,7 @@
         </div>
 
         <p class="schedule-block-guide">
-            오늘의 핵심을 아래 고정 블록에 배치하세요. 마지막 블록은 버퍼 시간으로 활용할 수 있습니다.
+            오늘의 핵심을 각 고정 블록 안에서 선택하고 바로 배정하세요. 마지막 블록은 버퍼 시간으로 활용할 수 있습니다.
         </p>
 
         <div class="schedule-status-bar" id="schedule-status-bar" aria-label="시간 배치 상태 요약">
@@ -183,14 +183,9 @@
             <button type="button" id="schedule-status-unassigned" class="schedule-status-pill schedule-status-button" data-action="scroll-to-unassigned">미배정 0개</button>
         </div>
 
-        <div class="schedule-layout">
-            <div class="task-list-sidebar">
-                <div class="task-list" id="draggable-source-list">
-                    <!-- 자바스크립트로 채워짐: 미배정 태스크 -->
-                </div>
-            </div>
-            <div class="timeline-sidebar" id="timeline-slots">
-                <!-- 자바스크립트로 채워짐: 시간 슬롯 -->
+        <div class="schedule-layout schedule-layout-single">
+            <div class="timeline-sidebar timeline-sidebar-planner" id="timeline-slots">
+                <!-- 자바스크립트로 채워짐: 고정 블록 카드 -->
             </div>
         </div>
 

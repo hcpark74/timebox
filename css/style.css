@@ -463,10 +463,6 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
-.task-item-scheduler {
-    align-items: flex-start;
-}
-
 .drag-handle {
     color: var(--text-muted);
     margin-right: 16px;
@@ -521,6 +517,10 @@ body {
     font: inherit;
     color: var(--text-dark);
     background-color: var(--bg-white);
+}
+
+.schedule-select option:disabled {
+    color: #9aa3ad;
 }
 
 .schedule-assign-button {
@@ -1087,6 +1087,81 @@ body {
     color: #b86100;
 }
 
+.schedule-layout.schedule-layout-single {
+    display: block;
+    height: auto;
+    overflow: visible;
+    gap: 0;
+}
+
+.timeline-sidebar-planner {
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+    background: transparent;
+    overflow: visible;
+    padding-bottom: 0;
+}
+
+.planner-slot {
+    gap: 12px;
+    min-height: 0;
+}
+
+.planner-slot-current {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(241, 220, 194, 0.9);
+}
+
+.planner-slot-current.is-filled {
+    border-color: #ffd8a8;
+    background-color: #fff4e5;
+}
+
+.planner-slot-current-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.planner-slot-current-task {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-dark);
+}
+
+.planner-slot-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.planner-unschedule-button {
+    flex: 0 0 auto;
+    margin-top: 0;
+    padding: 8px 12px;
+    min-height: 38px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.schedule-assign-button {
+    min-height: 38px;
+}
+
+.planner-unschedule-button:disabled,
+.schedule-assign-button:disabled,
+.schedule-select:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
 .task-list-sidebar {
     width: 60%;
     overflow-y: auto;
@@ -1114,6 +1189,15 @@ body {
     background-color: #f8f9fa;
     overflow-y: auto;
     padding-bottom: 80px;
+}
+
+.timeline-sidebar.timeline-sidebar-planner {
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+    background: transparent;
+    overflow: visible;
+    padding-bottom: 0;
 }
 
 .timeline-sidebar .time-slot {
@@ -1292,4 +1376,12 @@ body {
     font-weight: 600;
     flex: 1;
     cursor: pointer;
+}
+
+.planner-slot-controls .planner-unschedule-button {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    min-height: 38px;
+    border-radius: 8px;
+    font-size: 14px;
 }

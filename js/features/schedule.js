@@ -58,6 +58,24 @@ export async function scheduleTaskToBlock(taskId, time) {
         : `할 일 '${task.title}'을 ${time} 블록에 배치했습니다.`);
 }
 
+export async function clearBlockByTime(time) {
+    if (!time) {
+        return;
+    }
+
+    const selectedDate = getDateString(state.selectedDate);
+    const task = state.tasks.find((item) => item.scheduledDate === selectedDate && item.scheduledTime === time);
+
+    if (!task) {
+        return;
+    }
+
+    task.scheduledTime = null;
+    task.scheduledDate = null;
+    await saveData();
+    announceStatus(`할 일 '${task.title}'을 ${time} 블록에서 해제했습니다.`);
+}
+
 export async function resetSchedule() {
     const selectedDate = getDateString(state.selectedDate);
     let resetCount = 0;
@@ -78,34 +96,23 @@ export async function resetSchedule() {
 }
 
 export function initDragAndDrop() {
-    new Sortable(document.getElementById("priority-list"), {
-        group: "shared",
-        animation: 150,
-        onEnd: onReorder
-    });
+    const priorityList = document.getElementById("priority-list");
+    const backlogList = document.getElementById("backlog-list");
 
-    new Sortable(document.getElementById("backlog-list"), {
-        group: "shared",
-        animation: 150,
-        onEnd: onReorder
-    });
+    if (priorityList) {
+        new Sortable(priorityList, {
+            group: "shared",
+            animation: 150,
+            onEnd: onReorder
+        });
+    }
 
-    new Sortable(document.getElementById("draggable-source-list"), {
-        group: { name: "scheduling", pull: "clone", put: true },
-        sort: false,
-        animation: 150,
-        onAdd: async (evt) => {
-            const taskId = evt.item.getAttribute("data-id");
-            const task = state.tasks.find((item) => item.id === taskId);
-
-            if (!task) {
-                return;
-            }
-
-            task.scheduledTime = null;
-            task.scheduledDate = null;
-            await saveData();
-            announceStatus(`할 일 '${task.title}'을 다시 미배정 목록으로 옮겼습니다.`);
+    if (backlogList) {
+        new Sortable(backlogList, {
+            group: "shared",
+            animation: 150,
+            onEnd: onReorder
         }
-    });
+        );
+    }
 }

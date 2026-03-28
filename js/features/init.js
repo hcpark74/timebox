@@ -5,7 +5,7 @@ import { updateUI } from "../render/index.js";
 import { toggleBacklogSection } from "../render/tasks.js";
 import { copySyncId, editSyncId, initSyncId, loadData } from "../services/sync.js";
 import { addNewTask, deleteTask, moveTaskToBucket, moveTaskWithinList } from "./tasks.js";
-import { initDragAndDrop, resetSchedule, scheduleTaskToBlock, toggleTaskStatus, unscheduleTask } from "./schedule.js";
+import { clearBlockByTime, initDragAndDrop, resetSchedule, scheduleTaskToBlock, toggleTaskStatus, unscheduleTask } from "./schedule.js";
 import { setActiveTab, showPage } from "./navigation.js";
 
 function bindStaticEvents() {
@@ -39,34 +39,23 @@ function bindStaticEvents() {
             case "add-task":
                 await addNewTask();
                 break;
-            case "assign-task-to-slot": {
-                const scheduleCard = actionTarget.closest(".task-item-scheduler");
-                const scheduleSelect = scheduleCard?.querySelector(".schedule-select");
-                const selectedTime = scheduleSelect?.value;
+            case "assign-selected-to-block": {
+                const blockTime = actionTarget.dataset.time;
+                const scheduleSelect = document.querySelector(`#planner-slot-select-${CSS.escape(blockTime)}`);
+                const selectedTaskId = scheduleSelect?.value;
 
-                if (!selectedTime) {
-                    announceStatus("먼저 배치할 시간 블록을 선택하세요.");
+                if (!selectedTaskId) {
+                    announceStatus("먼저 배정할 오늘의 핵심을 선택하세요.");
                     scheduleSelect?.focus();
                     break;
                 }
 
-                await scheduleTaskToBlock(taskId, selectedTime);
+                await scheduleTaskToBlock(selectedTaskId, blockTime);
                 break;
             }
-            case "move-scheduled-task": {
-                const scheduledCard = actionTarget.closest(".scheduled-task-chip");
-                const scheduleSelect = scheduledCard?.querySelector(".schedule-select");
-                const selectedTime = scheduleSelect?.value;
-
-                if (!selectedTime) {
-                    announceStatus("이동할 시간 블록을 선택하세요.");
-                    scheduleSelect?.focus();
-                    break;
-                }
-
-                await scheduleTaskToBlock(taskId, selectedTime);
+            case "clear-block":
+                await clearBlockByTime(actionTarget.dataset.time);
                 break;
-            }
             case "toggle-backlog":
                 toggleBacklogSection();
                 break;
@@ -89,17 +78,18 @@ function bindStaticEvents() {
                 await resetSchedule();
                 break;
             case "scroll-to-unassigned": {
-                const firstUnassignedTask = document.querySelector("#draggable-source-list .task-item-scheduler");
+                const firstOpenBlock = document.querySelector(".planner-slot:not(.buffer-slot) .planner-slot-current:not(.is-filled)")
+                    || document.querySelector(".planner-slot .planner-slot-controls");
 
-                if (!firstUnassignedTask) {
-                    announceStatus("현재 미배정된 핵심 작업이 없습니다.");
+                if (!firstOpenBlock) {
+                    announceStatus("현재 바로 배정할 블록이 없습니다.");
                     break;
                 }
 
-                firstUnassignedTask.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                const selectElement = firstUnassignedTask.querySelector(".schedule-select");
+                firstOpenBlock.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                const selectElement = firstOpenBlock.closest(".planner-slot")?.querySelector(".schedule-select");
                 selectElement?.focus();
-                announceStatus("미배정 작업 목록으로 이동했습니다.");
+                announceStatus("배정이 필요한 블록으로 이동했습니다.");
                 break;
             }
             case "delete-task":

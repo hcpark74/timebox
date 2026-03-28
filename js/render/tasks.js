@@ -1,6 +1,6 @@
-import { MAX_PRIORITY_TASKS, SCHEDULING_BLOCKS, state } from "../state/store.js";
+import { MAX_PRIORITY_TASKS, state } from "../state/store.js";
 import { announceStatus } from "../lib/a11y.js";
-import { formatTime12, getDateString } from "../lib/date.js";
+import { getDateString } from "../lib/date.js";
 
 let isBacklogExpanded = false;
 
@@ -21,19 +21,16 @@ export function renderTaskLists() {
     const backlogElement = document.getElementById("backlog-list");
     const backlogToggle = document.querySelector('[data-action="toggle-backlog"]');
     const backlogToggleCount = document.getElementById("backlog-toggle-count");
-    const dragSourceElement = document.getElementById("draggable-source-list");
     const scheduleStatusPriority = document.getElementById("schedule-status-priority");
     const scheduleStatusAssigned = document.getElementById("schedule-status-assigned");
     const scheduleStatusUnassigned = document.getElementById("schedule-status-unassigned");
 
-    if (!priorityElement || !backlogElement || !dragSourceElement) {
+    if (!priorityElement || !backlogElement) {
         return;
     }
 
     priorityElement.innerHTML = "";
     backlogElement.innerHTML = "";
-    dragSourceElement.innerHTML = "";
-
     const priorityTasks = state.tasks.filter((task) => task.priority === "high");
     const backlogTasks = state.tasks.filter((task) => task.priority !== "high");
 
@@ -77,27 +74,6 @@ export function renderTaskLists() {
             priorityElement.appendChild(taskElement.cloneNode(true));
         } else {
             backlogElement.appendChild(taskElement.cloneNode(true));
-        }
-
-        if (!task.scheduledTime) {
-            const dragElement = document.createElement("div");
-            dragElement.className = "task-item task-item-scheduler";
-            dragElement.setAttribute("data-id", task.id);
-            dragElement.innerHTML = `
-                <div class="task-icon"><i class="fas fa-briefcase"></i></div>
-                <div class="scheduler-task-content">
-                    <span class="task-name">${task.title}</span>
-                    <div class="scheduler-manual-controls">
-                        <label class="sr-only" for="schedule-select-${task.id}">${task.title} 배치 블록 선택</label>
-                        <select id="schedule-select-${task.id}" class="schedule-select" data-task-id="${task.id}" aria-label="${task.title} 배치 블록 선택">
-                            <option value="">블록 선택</option>
-                            ${SCHEDULING_BLOCKS.map((block) => `<option value="${block.start}">${block.title} (${formatTime12(block.start)})</option>`).join("")}
-                        </select>
-                        <button type="button" class="schedule-assign-button" data-action="assign-task-to-slot" data-task-id="${task.id}" aria-label="${task.title} 배치하기">배치</button>
-                    </div>
-                </div>
-            `;
-            dragSourceElement.appendChild(dragElement);
         }
     });
 

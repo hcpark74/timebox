@@ -1,6 +1,5 @@
 import { SCHEDULING_BLOCKS, state } from "../state/store.js";
 import { formatTime12, getDateString } from "../lib/date.js";
-import { scheduleTaskToBlock } from "../features/schedule.js";
 
 export function renderTimeline() {
     const timelineElement = document.getElementById("timeline-view");
@@ -52,11 +51,21 @@ export function renderTimelineSlots() {
     container.innerHTML = "";
 
     const selectedDate = getDateString(state.selectedDate);
+    const priorityTasks = state.tasks.filter((item) => item.priority === "high");
 
     SCHEDULING_BLOCKS.forEach((block) => {
         const slot = document.createElement("div");
-        slot.className = `time-slot drop-zone block-slot ${block.buffer ? "buffer-slot" : ""}`;
+        slot.className = `time-slot block-slot planner-slot ${block.buffer ? "buffer-slot" : ""}`;
         slot.setAttribute("data-time", block.start);
+        const task = state.tasks.find((item) => item.scheduledDate === selectedDate && item.scheduledTime === block.start);
+        const optionsMarkup = priorityTasks.length
+            ? priorityTasks.map((priorityTask) => `
+                <option value="${priorityTask.id}" ${task?.id === priorityTask.id ? "selected" : ""} ${priorityTask.scheduledDate === selectedDate && priorityTask.scheduledTime && priorityTask.scheduledTime !== block.start ? "disabled" : ""}>
+                    ${priorityTask.title}${priorityTask.scheduledDate === selectedDate && priorityTask.scheduledTime && priorityTask.scheduledTime !== block.start ? " - 다른 블록에 배정됨" : ""}
+                </option>
+            `).join("")
+            : '<option value="">오늘의 핵심이 없습니다</option>';
+
         slot.innerHTML = `
             <div class="block-slot-header">
                 <div class="block-slot-title">
@@ -66,44 +75,21 @@ export function renderTimelineSlots() {
                 <span class="block-slot-badge">${block.tag}</span>
             </div>
             <p class="block-slot-description">${block.description}</p>
+            <div class="planner-slot-current ${task ? "is-filled" : ""}">
+                <span class="planner-slot-current-label">현재 배정</span>
+                <strong class="planner-slot-current-task">${task ? task.title : "아직 배정된 핵심 할 일이 없습니다."}</strong>
+            </div>
+            <div class="planner-slot-controls">
+                <label class="sr-only" for="planner-slot-select-${block.start}">${block.title}에 배정할 오늘의 핵심 선택</label>
+                <select id="planner-slot-select-${block.start}" class="schedule-select" data-time="${block.start}" aria-label="${block.title}에 배정할 오늘의 핵심 선택" ${priorityTasks.length ? "" : "disabled"}>
+                    ${task ? "" : '<option value="">핵심 할일 선택</option>'}
+                    ${optionsMarkup}
+                </select>
+                <button type="button" class="schedule-assign-button" data-action="assign-selected-to-block" data-time="${block.start}" ${priorityTasks.length ? "" : "disabled"}>배정</button>
+                <button type="button" class="btn-secondary planner-unschedule-button" data-action="clear-block" data-time="${block.start}" ${task ? "" : "disabled"}>해제</button>
+            </div>
         `;
 
-        const task = state.tasks.find((item) => item.scheduledDate === selectedDate && item.scheduledTime === block.start);
-
-        if (task) {
-            slot.innerHTML += `
-                <div class="task-item-embedded scheduled-task-chip">
-                    <div class="scheduled-task-content">
-                        <span>${task.title}</span>
-                        <div class="scheduled-task-controls">
-                            <label class="sr-only" for="scheduled-move-${task.id}">${task.title} 이동 블록 선택</label>
-                            <select id="scheduled-move-${task.id}" class="schedule-select schedule-select-inline" data-task-id="${task.id}" aria-label="${task.title} 이동 블록 선택">
-                                ${SCHEDULING_BLOCKS.map((optionBlock) => `
-                                    <option value="${optionBlock.start}" ${optionBlock.start === block.start ? "selected" : ""}>
-                                        ${optionBlock.title} (${formatTime12(optionBlock.start)})
-                                    </option>
-                                `).join("")}
-                            </select>
-                            <button type="button" class="schedule-assign-button schedule-move-button" data-action="move-scheduled-task" data-task-id="${task.id}" aria-label="${task.title} 다른 블록으로 이동">이동</button>
-                        </div>
-                    </div>
-                    <button type="button" class="task-remove-btn" data-action="unschedule-task" data-task-id="${task.id}" aria-label="배치 해제">
-                        <i class="fas fa-xmark"></i>
-                    </button>
-                </div>
-            `;
-        }
-
         container.appendChild(slot);
-
-        new Sortable(slot, {
-            group: { name: "scheduling", pull: false, put: true },
-            sort: false,
-            onAdd(evt) {
-                const taskId = evt.item.getAttribute("data-id");
-                const time = slot.getAttribute("data-time");
-                scheduleTaskToBlock(taskId, time);
-            }
-        });
     });
 }
